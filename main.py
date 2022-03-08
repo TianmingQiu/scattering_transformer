@@ -8,7 +8,7 @@ from vit_pytorch import ViT
 
 torch.manual_seed(42)
 
-DOWNLOAD_PATH = '~/input/dataset'
+DOWNLOAD_PATH = './input/dataset'
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
 DEVICE = 'cuda'

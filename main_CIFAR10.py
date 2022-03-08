@@ -15,6 +15,7 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
 DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
+SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 512
 BATCH_SIZE_TEST = 1000
 
@@ -101,3 +102,10 @@ for epoch in range(1, N_EPOCHS + 1):
     evaluate(model, test_loader, test_loss_history)
 
 print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
+
+if not os.path.exists(SAVE_FOLDER):
+    os.mkdir(SAVE_FOLDER)
+
+save_path = SAVE_FOLDER + '/cifar10_' + str(N_EPOCHS) + '.pth'
+torch.save(model.state_dict, save_path)
+print('Model saved to', save_path)

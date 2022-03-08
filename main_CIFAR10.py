@@ -5,6 +5,7 @@ from torchvision import transforms
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 from torch import optim
+from torch.optim import lr_scheduler
 import time
 import os
 
@@ -54,7 +55,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         loss.backward()
         optimizer.step()
 
-        if i % 25 == 0:
+        if i % 20 == 0:
             print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
@@ -87,9 +88,13 @@ def evaluate(model, data_loader, loss_history):
 N_EPOCHS = 25
 
 start_time = time.time()
+# model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
+#             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-            dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=512, depth=4, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
 if device == 'cuda':
@@ -98,15 +103,16 @@ if device == 'cuda':
 
 train_loss_history, test_loss_history = [], []
 for epoch in range(1, N_EPOCHS + 1):
-    print('Epoch:', epoch)
+    print('Epoch:' + '{:4}'.format(epoch), ' Learning rate: ' + '{:.1e}'.format(optimizer.param_groups[0]['lr']))
     train_epoch(model, optimizer, train_loader, train_loss_history)
     evaluate(model, test_loader, test_loss_history)
+    scheduler.step(test_loss_history[-1])
 
 print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/cifar10_' + str(N_EPOCHS) + '.pth'
+save_path = SAVE_FOLDER + '/cifar_d4_b' + str(N_EPOCHS) + '.pth'
 torch.save(model.state_dict, save_path)
 print('Model saved to', save_path)

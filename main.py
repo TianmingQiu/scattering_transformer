@@ -8,7 +8,7 @@ from vit_pytorch import ViT
 
 torch.manual_seed(42)
 
-DOWNLOAD_PATH = '~/dataset'
+DOWNLOAD_PATH = '~/input/dataset'
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
 DEVICE = 'cuda'
@@ -16,21 +16,21 @@ DEVICE = 'cuda'
 transform_mnist = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
                                torchvision.transforms.Normalize((0.1307,), (0.3081,))])
 
-# train_set = torchvision.datasets.MNIST(DOWNLOAD_PATH, train=True, download=True,
-#                                        transform=transform_mnist)
-# train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-
-# test_set = torchvision.datasets.MNIST(DOWNLOAD_PATH, train=False, download=True,
-#                                       transform=transform_mnist)
-# test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
-
-train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,
+train_set = torchvision.datasets.MNIST(DOWNLOAD_PATH, train=True, download=True,
                                        transform=transform_mnist)
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
 
-test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,
+test_set = torchvision.datasets.MNIST(DOWNLOAD_PATH, train=False, download=True,
                                       transform=transform_mnist)
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+
+# train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,
+#                                        transform=transform_mnist)
+# train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+
+# test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,
+#                                       transform=transform_mnist)
+# test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)

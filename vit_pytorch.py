@@ -3,8 +3,10 @@ import torch.nn.functional as F
 
 from torch import nn
 from einops import rearrange
+import warnings
 
-MIN_NUM_PATCHES = 16
+SUGGEST_NUM_PATCHES = 16
+MIN_NUM_PATCHES = 4
 class Residual(nn.Module):
     def __init__(self, fn):
         super().__init__()
@@ -87,7 +89,9 @@ class ViT(nn.Module):
         assert image_size % patch_size == 0, 'image dimensions must be divisible by the patch size'
         num_patches = (image_size // patch_size) ** 2
         patch_dim = channels * patch_size ** 2
-        assert num_patches > MIN_NUM_PATCHES, f'your number of patches ({num_patches}) is way too small for attention to be effective. try decreasing your patch size'
+        if num_patches <= SUGGEST_NUM_PATCHES:
+            warnings.warn(f'Your number of patches ({num_patches}) may be too small for attention to be effective.')
+        assert num_patches > MIN_NUM_PATCHES, f'Your number of patches ({num_patches}) is way too small for attention to be effective. Try decreasing your patch size.'
 
         self.patch_size = patch_size
 

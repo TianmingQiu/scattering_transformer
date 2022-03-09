@@ -91,7 +91,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-        dim=512, depth=4, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=512, depth=2, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
@@ -113,6 +113,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/cifar_d4_b' + str(N_EPOCHS) + '.pth'
+save_path = SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'
 torch.save(model.state_dict, save_path)
 print('Model saved to', save_path)

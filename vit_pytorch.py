@@ -133,7 +133,7 @@ class ViT(nn.Module):
 class ViT_scatter(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
-        self.scatter_angle = 4
+        self.scatter_angle = 6
         self.scatter_layer = 1
         self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle,
                                     shape=(patch_size,patch_size))

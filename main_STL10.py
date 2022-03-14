@@ -79,7 +79,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 1
+N_EPOCHS = 200
 
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,

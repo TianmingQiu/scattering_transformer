@@ -21,9 +21,6 @@ SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 512
 BATCH_SIZE_TEST = 1000
 
-transform_mnist = torchvision.transforms.Compose([transforms.ToTensor(),
-                               transforms.Normalize((0.1307,), (0.3081,))])
-
 transform_cifar10 = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.Resize(32),

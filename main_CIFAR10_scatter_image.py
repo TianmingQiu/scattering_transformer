@@ -135,6 +135,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '_s.pth'
+save_path = SAVE_FOLDER + '/cifar_d6_b' + str(N_EPOCHS) + '_s.pth'
 torch.save(model.state_dict(), save_path)
 print('Model saved to', save_path)

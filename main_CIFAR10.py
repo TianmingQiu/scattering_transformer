@@ -13,16 +13,13 @@ from vit_pytorch import ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '4'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 512
 BATCH_SIZE_TEST = 1000
-
-transform_mnist = torchvision.transforms.Compose([transforms.ToTensor(),
-                               transforms.Normalize((0.1307,), (0.3081,))])
 
 transform_cifar10 = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
@@ -91,7 +88,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-        dim=512, depth=2, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -114,6 +111,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'
+save_path = SAVE_FOLDER + '/cifar_d6_b' + str(N_EPOCHS) + '.pth'
 torch.save(model.state_dict(), save_path)
 print('Model saved to', save_path)

@@ -9,12 +9,12 @@ from torch.optim import lr_scheduler
 import time
 import os
 
-from vit_pytorch import ViT
+from vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
@@ -70,7 +70,7 @@ def evaluate(model, data_loader, loss_history):
 
     with torch.no_grad():
         for data, target in data_loader:
-            target = target.to(device)
+            data, target = data.to(device), target.to(device)
             output = F.log_softmax(model(data), dim=1)
             loss = F.nll_loss(output, target, reduction='sum')
             _, pred = torch.max(output, dim=1)
@@ -90,8 +90,8 @@ N_EPOCHS = 25
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-        dim=512, depth=2, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+model = ViT_scatter(image_size=32, patch_size=8, num_classes=10, channels=3,
+        dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -99,7 +99,7 @@ scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose
 
 model.to(device)
 if device == 'cuda':
-    model = torch.nn.DataParallel(model) # make parallel
+    # model = torch.nn.DataParallel(model) # make parallel
     cudnn.benchmark = True
 
 train_loss_history, test_loss_history = [], []

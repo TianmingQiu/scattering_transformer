@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch import nn
 from einops import rearrange
 import warnings
+from kymatio.torch import Scattering2D
 
 SUGGEST_NUM_PATCHES = 16
 MIN_NUM_PATCHES = 4
@@ -116,6 +117,58 @@ class ViT(nn.Module):
         p = self.patch_size
 
         x = rearrange(img, 'b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1 = p, p2 = p)
+        x = self.patch_to_embedding(x)
+        b, n, _ = x.shape
+
+        cls_tokens = self.cls_token.expand(b, -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        x += self.pos_embedding[:, :(n + 1)]
+        x = self.dropout(x)
+
+        x = self.transformer(x, mask)
+
+        x = self.to_cls_token(x[:, 0])
+        return self.mlp_head(x)
+
+class ViT_scatter(nn.Module):
+    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
+        super().__init__()
+        self.scatter_angle = 4
+        self.scatter_layer = 1
+        self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle,
+                                    shape=(patch_size,patch_size))
+        assert image_size % patch_size == 0, 'image dimensions must be divisible by the patch size'
+        num_patches = (image_size // patch_size) ** 2
+        patch_dim = int(channels * patch_size ** 2 / 4 * (1 + self.scatter_angle))
+        if num_patches <= SUGGEST_NUM_PATCHES:
+            warnings.warn(f'Your number of patches ({num_patches}) may be too small for attention to be effective.')
+        assert num_patches > MIN_NUM_PATCHES, f'Your number of patches ({num_patches}) is way too small for attention to be effective. Try decreasing your patch size.'
+
+        self.patch_size = patch_size
+
+        self.pos_embedding = nn.Parameter(torch.randn(1, num_patches + 1, dim))
+        self.patch_to_embedding = nn.Linear(patch_dim, dim)
+        self.cls_token = nn.Parameter(torch.randn(1, 1, dim))
+        self.dropout = nn.Dropout(emb_dropout)
+
+        self.transformer = Transformer(dim, depth, heads, mlp_dim, dropout)
+
+        self.to_cls_token = nn.Identity()
+
+        self.mlp_head = nn.Sequential(
+            nn.LayerNorm(dim),
+            nn.Linear(dim, mlp_dim),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(mlp_dim, num_classes)
+        )
+
+    def forward(self, img, mask = None):
+        p = self.patch_size
+
+        x = rearrange(img, 'b c (h p1) (w p2) -> b (h w) c p1 p2', p1 = p, p2 = p)
+        x1 = self.scatter(x)
+        x = x1.view(x1.shape[0], x1.shape[1],-1)
         x = self.patch_to_embedding(x)
         b, n, _ = x.shape
 

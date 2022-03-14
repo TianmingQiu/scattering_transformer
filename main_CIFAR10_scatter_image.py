@@ -70,15 +70,15 @@ def train_epoch(model, optimizer, data_loader, loss_history):
             print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
-            # plt.imshow(torch.permute(data[0], (1,2,0)))
-            # plt.show()
-            # scattered_data = scattering(data)
-            # for i in range(scattered_data.shape[2]):
-            #     image = torch.permute(scattered_data,(0,2,3,4,1))[0,i]
-            #     plt.imshow(image / image.abs().mean() * 0.4)
-            #     print(image.abs().mean())
-            #     plt.show()
-            # pause()
+            plt.imshow(torch.permute(data[0], (1,2,0)))
+            plt.show()
+            scattered_data = scattering(data)
+            for i in range(scattered_data.shape[2]):
+                image = torch.permute(scattered_data,(0,2,3,4,1))[0,i]
+                plt.imshow(image / image.abs().mean() * 0.4)
+                print(image.abs().mean())
+                plt.show()
+            pause()
             loss_history.append(loss.item())
 
 def evaluate(model, data_loader, loss_history):
@@ -113,7 +113,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=16, patch_size=2, num_classes=10, channels=3 * 5,
-        dim=512, depth=2, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
@@ -135,6 +135,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'
-torch.save(model.state_dict, save_path)
+save_path = SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '_s.pth'
+torch.save(model.state_dict(), save_path)
 print('Model saved to', save_path)

@@ -140,3 +140,6 @@ cython_debug/
 
 # Ignore checkpoints
 checkpoint/
+
+# Ignore logs
+log/

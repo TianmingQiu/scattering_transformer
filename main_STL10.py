@@ -8,7 +8,7 @@ from torch.optim import lr_scheduler
 import time
 import os
 
-from vit_pytorch import ViT, ViT_scatter
+from models.vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)

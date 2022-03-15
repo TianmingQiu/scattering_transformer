@@ -12,7 +12,7 @@ from kymatio.torch import Scattering2D
 from einops import rearrange
 from matplotlib import pyplot as plt
 
-from vit_pytorch import ViT
+from models.vit_pytorch import ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)

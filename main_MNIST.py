@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch import optim
 import time
 
-from vit_pytorch import ViT
+from models.vit_pytorch import ViT
 
 torch.manual_seed(42)
 

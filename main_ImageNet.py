@@ -15,7 +15,7 @@ torch.cuda.manual_seed(42)
 os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 DEVICE_LIST = [0]
 
-DOWNLOAD_PATH = './input/dataset'
+DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
 SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
@@ -35,7 +35,7 @@ def train_dataset(data_dir):
     return train_set
 
 def test_dataset(data_dir):
-    test_dir = os.path.join(data_dir, 'test')
+    test_dir = os.path.join(data_dir, 'val')
     test_transforms = transforms.Compose([
         transforms.ToTensor(),
         normalize_transform()

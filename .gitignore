@@ -143,3 +143,6 @@ checkpoint/
 
 # Ignore logs
 log/
+
+# Ignore batch commands
+batch_command.py

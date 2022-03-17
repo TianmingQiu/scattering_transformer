@@ -108,6 +108,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/stl_b' + str(N_EPOCHS) + '_s.pth'
+save_path = SAVE_FOLDER + '/stl_vit_conv.pth'
 torch.save((model.state_dict(),accuracy_history), save_path)
 print('Model saved to', save_path)

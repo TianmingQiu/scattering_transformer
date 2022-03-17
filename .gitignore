@@ -144,5 +144,6 @@ checkpoint/
 # Ignore logs
 log/
 
-# Ignore batch commands
+# Ignore batch/plot commands
 batch_command.py
+plot_to_output.py

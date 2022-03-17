@@ -12,7 +12,7 @@ from models.vit_pytorch import ViT_with_conv_head
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'

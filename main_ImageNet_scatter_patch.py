@@ -14,7 +14,7 @@ from models.vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'

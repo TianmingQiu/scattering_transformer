@@ -1,4 +1,3 @@
-from random import shuffle
 import torch
 import torchvision
 from torchvision import transforms
@@ -10,11 +9,13 @@ import time
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+
 from models.vit_pytorch import ViT, ViT_scatter
+from models.ps_vit import PSViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
@@ -119,14 +120,14 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 50
+N_EPOCHS = 5
 
 start_time = time.time()
-# model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-#             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT(image_size=IMAGE_SIZE, patch_size=16, num_classes=NUM_CLASS, channels=3,
-        dim=200, depth=6, heads=8, mlp_dim=200*4, dropout=0.1, emb_dropout=0.1)
-# model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
+# model = ViT(image_size=96, patch_size=8, num_classes=10, channels=3,
+#         dim=512, depth=6, heads=8, mlp_dim=512*4, dropout=0.1, emb_dropout=0.1)
+model = PSViT(img_size=IMAGE_SIZE, embed_dim=384, num_point_w=12, num_point_h=12, num_classes=NUM_CLASS, num_iters=4, depth=6,
+              num_heads=6, mlp_ratio=3, offset_gamma=1., offset_bias=True, with_cls_token=True)
+
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
@@ -147,7 +148,7 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/imagenet_b' + str(N_EPOCHS) + '.pth'
+save_path = SAVE_FOLDER + '/imagenet_psvit.pth'
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
 

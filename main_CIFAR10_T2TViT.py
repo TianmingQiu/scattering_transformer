@@ -10,6 +10,7 @@ import time
 import os
 
 from models.vit_pytorch import ViT
+from models.t2t_vit import T2T_ViT 
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
@@ -87,7 +88,7 @@ N_EPOCHS = 200
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
+model = T2T_ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
         dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 

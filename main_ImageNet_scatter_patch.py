@@ -14,8 +14,8 @@ from models.vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '6'
-DEVICE_LIST = [0]
+os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
+DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
 SAVE_FOLDER = './checkpoint'
@@ -74,7 +74,7 @@ def data_loader(data_dir, num_class=10, batch_size_train=100, batch_size_test=10
 
 train_loader,test_loader = data_loader(DOWNLOAD_PATH, num_class=NUM_CLASS, batch_size_train=BATCH_SIZE_TRAIN, batch_size_test=BATCH_SIZE_TEST, workers=2, pin_memory=True)
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'cuda: 0,1,2,3' if torch.cuda.is_available() else 'cpu'
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)

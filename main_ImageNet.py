@@ -22,7 +22,7 @@ SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
 IMAGE_SIZE = 224
-NUM_CLASS = 10
+NUM_CLASS = 1000
 
 def normalize_transform():
     return transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
@@ -119,7 +119,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 50
+N_EPOCHS = 200
 
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
@@ -156,3 +156,4 @@ plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.xlabel('accuracy',fontsize=15)
+plt.savefig(SAVE_FOLDER + 'imagenet_b200.png', format='png', bbox_inches='tight')

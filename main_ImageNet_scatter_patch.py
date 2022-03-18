@@ -22,7 +22,7 @@ SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
 IMAGE_SIZE = 224
-NUM_CLASS = 1000
+NUM_CLASS = 100
 
 def normalize_transform():
     return transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
@@ -74,7 +74,7 @@ def data_loader(data_dir, num_class=10, batch_size_train=100, batch_size_test=10
 
 train_loader,test_loader = data_loader(DOWNLOAD_PATH, num_class=NUM_CLASS, batch_size_train=BATCH_SIZE_TRAIN, batch_size_test=BATCH_SIZE_TEST, workers=2, pin_memory=True)
 
-device = 'cuda: 0,1,2,3' if torch.cuda.is_available() else 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
@@ -127,7 +127,7 @@ start_time = time.time()
 model = ViT_scatter(image_size=IMAGE_SIZE, patch_size=16, num_classes=NUM_CLASS, channels=3,
         dim=200, depth=6, heads=8, mlp_dim=200*4, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
-
+# model = torch.nn.DataParallel(model)
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 

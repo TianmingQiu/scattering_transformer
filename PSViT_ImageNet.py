@@ -15,12 +15,13 @@ from models.ps_vit import PSViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+os.environ['CUDA_VISIBLE_DEVICES'] = '6'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
 SAVE_FOLDER = './checkpoint'
 BATCH_SIZE_TRAIN = 100
+
 BATCH_SIZE_TEST = 1000
 IMAGE_SIZE = 224
 NUM_CLASS = 10
@@ -120,13 +121,13 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 5
+N_EPOCHS = 50
 
 start_time = time.time()
 # model = ViT(image_size=96, patch_size=8, num_classes=10, channels=3,
 #         dim=512, depth=6, heads=8, mlp_dim=512*4, dropout=0.1, emb_dropout=0.1)
-model = PSViT(img_size=IMAGE_SIZE, embed_dim=384, num_point_w=12, num_point_h=12, num_classes=NUM_CLASS, num_iters=4, depth=6,
-              num_heads=6, mlp_ratio=3, offset_gamma=1., offset_bias=True, with_cls_token=True)
+model = PSViT(img_size=IMAGE_SIZE, embed_dim=200, num_point_w=14, num_point_h=14, num_classes=NUM_CLASS, num_iters=4, depth=6,
+              num_heads=8, mlp_ratio=4, offset_gamma=1., offset_bias=True, with_cls_token=True)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)

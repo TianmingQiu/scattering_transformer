@@ -113,7 +113,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=16, patch_size=2, num_classes=10, channels=3 * 5,
-        dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=192, depth=6, heads=4, mlp_dim=192*3, dropout=0.1, emb_dropout=0.1)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)

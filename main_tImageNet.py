@@ -1,3 +1,4 @@
+from random import shuffle
 import torch
 import torchvision
 from torchvision import transforms
@@ -9,22 +10,37 @@ import time
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
 from models.vit_pytorch import ViT, ViT_scatter
-from models.ps_vit import PSViT
+
+
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '6'
-DEVICE_LIST = [0]
+os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
+DEVICE_LIST = [0,1,2,3]
 
-DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
+# DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
+DOWNLOAD_PATH = './input/dataset/tiny-imagenet-200'
 SAVE_FOLDER = './checkpoint'
-BATCH_SIZE_TRAIN = 100
 
+# Save output
+import sys
+old_stdout = sys.stdout
+log_file = open( SAVE_FOLDER + "t_imagenet_b200.log","w")
+sys.stdout = log_file
+
+# Hyperparameters
+BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
-IMAGE_SIZE = 224
-NUM_CLASS = 1000
+N_EPOCHS = 200
+
+IMAGE_SIZE = 64
+NUM_CLASS = 200
+PATCH_SIZE = 8
+DEPTH = 9
+HEAD = 12
+EMBED_DIM = 192
+MLP_RATIO = 4
 
 def normalize_transform():
     return transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
@@ -98,7 +114,6 @@ def train_epoch(model, optimizer, data_loader, loss_history):
 
 def evaluate(model, data_loader, loss_history, acc_history):
     model.eval()
-    
     total_samples = len(data_loader.dataset)
     correct_samples = 0
     total_loss = 0
@@ -121,14 +136,12 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 200
-
 start_time = time.time()
-# model = ViT(image_size=96, patch_size=8, num_classes=10, channels=3,
-#         dim=512, depth=6, heads=8, mlp_dim=512*4, dropout=0.1, emb_dropout=0.1)
-model = PSViT(img_size=IMAGE_SIZE, embed_dim=200, num_point_w=14, num_point_h=14, num_classes=NUM_CLASS, num_iters=4, depth=6,
-              num_heads=8, mlp_ratio=4, offset_gamma=1., offset_bias=True, with_cls_token=True)
-
+# model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
+#             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+        dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
+# model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
@@ -149,12 +162,16 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/imagenet_psvit.pth'
+save_path = SAVE_FOLDER + '/t_imagenet_b' + str(N_EPOCHS) + '.pth'
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
+sys.stdout = old_stdout
+log_file.close()
 
+# model,accuracy_history,test_loss_history=torch.load(SAVE_FOLDER + '/imagenet_b50.pth')
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.xlabel('accuracy',fontsize=15)
-plt.savefig(SAVE_FOLDER + 'imagenet_psvit.png', format='png', bbox_inches='tight')
+plt.savefig(SAVE_FOLDER + 't_imagenet_b200.png', format='png', bbox_inches='tight')
+

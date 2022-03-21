@@ -13,25 +13,25 @@ from input.dataset import Flowers102Dataset
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
-BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 72
+BATCH_SIZE_TRAIN = 72
+BATCH_SIZE_TEST = 400
 
 transform_flowers = transforms.Compose([
-    transforms.RandomResizedCrop(96),
+    transforms.RandomResizedCrop(128),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
 ])
 
-train_set = Flowers102Dataset(DOWNLOAD_PATH, split='test', transform=transform_flowers)
+train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
 
-test_set = Flowers102Dataset(DOWNLOAD_PATH, split='train',  transform=transform_flowers)
+test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -48,7 +48,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         loss.backward()
         optimizer.step()
 
-        if i % 10 == 0:
+        if i % 6 == 0:
             print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
@@ -82,11 +82,14 @@ def evaluate(model, data_loader, loss_history, acc_history):
 N_EPOCHS = 200
 
 start_time = time.time()
-model = ViT(image_size=96, patch_size=8, num_classes=102, channels=3,
-        dim=192, depth=10, heads=8, mlp_dim=192*4, dropout=0.1, emb_dropout=0.1)
+# model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
+#             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+model = ViT(image_size=128, patch_size=8, num_classes=102, channels=3,
+        dim=512, depth=6, heads=8, mlp_dim=512*4, dropout=0.1, emb_dropout=0.1)
+# model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
-scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
 if device == 'cuda':

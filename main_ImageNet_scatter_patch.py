@@ -17,27 +17,12 @@ torch.cuda.manual_seed(42)
 os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
 DEVICE_LIST = [0,1,2,3]
 
-DOWNLOAD_PATH = './input/dataset/tiny-imagenet-200'
+DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
 SAVE_FOLDER = './checkpoint'
-
-# Save output
-import sys
-old_stdout = sys.stdout
-log_file = open( SAVE_FOLDER + "t_imagenet_s.log","w")
-sys.stdout = log_file
-
-# Hyperparameters
 BATCH_SIZE_TRAIN = 100
 BATCH_SIZE_TEST = 1000
-N_EPOCHS = 200
-
-IMAGE_SIZE = 64
-NUM_CLASS = 200
-PATCH_SIZE = 8
-DEPTH = 9
-HEAD = 12
-LSA_DIM = 192
-MLP_RATIO = 4
+IMAGE_SIZE = 224
+NUM_CLASS = 100
 
 def normalize_transform():
     return transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
@@ -134,11 +119,13 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
+N_EPOCHS = 200
+
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT_scatter(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
-        dim=LSA_DIM, depth=DEPTH, heads=HEAD, mlp_dim=LSA_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
+model = ViT_scatter(image_size=IMAGE_SIZE, patch_size=16, num_classes=NUM_CLASS, channels=3,
+        dim=200, depth=6, heads=8, mlp_dim=200*4, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 # model = torch.nn.DataParallel(model)
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
@@ -161,15 +148,13 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/t_imagenet_b' + str(N_EPOCHS) + '_s.pth'
+save_path = SAVE_FOLDER + '/imagenet_b' + str(N_EPOCHS) + '_s.pth'
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
-sys.stdout = old_stdout
-log_file.close()
 
 # model,accuracy_history,test_loss_history=torch.load(SAVE_FOLDER + '/imagenet_b50.pth')
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.xlabel('accuracy',fontsize=15)
-plt.savefig(SAVE_FOLDER + 't_imagenet_s.png', format='png', bbox_inches='tight')
+plt.savefig(SAVE_FOLDER + 'imagenet_s.png', format='png', bbox_inches='tight')

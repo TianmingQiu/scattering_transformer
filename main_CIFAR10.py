@@ -88,7 +88,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-        dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
+        dim=192, depth=6, heads=4, mlp_dim=192*3, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)

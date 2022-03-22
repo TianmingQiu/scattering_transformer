@@ -6,7 +6,7 @@ from einops import rearrange
 import warnings
 from kymatio.torch import Scattering2D
 
-from models.ps_vit import conv3x3
+# from models.ps_vit import conv3x3
 
 SUGGEST_NUM_PATCHES = 16
 MIN_NUM_PATCHES = 4
@@ -183,6 +183,7 @@ class ViT_scatter(nn.Module):
 
         x = self.to_cls_token(x[:, 0])
         return self.mlp_head(x)
+'''
 
 class ViT_with_conv_head(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
@@ -236,3 +237,4 @@ class ViT_with_conv_head(nn.Module):
 
         x = self.to_cls_token(x[:, 0])
         return self.mlp_head(x)
+'''

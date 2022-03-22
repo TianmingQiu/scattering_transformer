@@ -1,95 +1,59 @@
+# Path definition
+import os
+import sys
+from numpy.core.function_base import add_newdoc
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
+
+from inspect import getsourcefile
+current_path = os.path.abspath(getsourcefile(lambda:0))
+current_dir = os.path.dirname(current_path)
+parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
+sys.path.insert(0, parent_dir)
+
+# Standard imports
 import torch
-import torchvision
-from torchvision import transforms
 import torch.nn.functional as F
-import torch.backends.cudnn as cudnn
 from torch import optim
 from torch.optim import lr_scheduler
+import torch.backends.cudnn as cudnn
 import time
-import os
 import numpy as np
 import matplotlib.pyplot as plt
+from random import shuffle
 
+# From the repository
 from models.vit_pytorch import ViT, ViT_scatter
+from data_loading import data_loader
 from models.ps_vit import PSViT
+
+# DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
+DOWNLOAD_PATH = parent + '/input/dataset/tiny-imagenet-200'
+SAVE_FOLDER = parent + '/checkpoint'
+RESULT_FOLDER = parent + '/log'
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
 os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
 DEVICE_LIST = [0,1,2,3]
 
-DOWNLOAD_PATH = './input/dataset/tiny-imagenet-200'
-SAVE_FOLDER = './checkpoint'
-
-# Save output
-import sys
-old_stdout = sys.stdout
-log_file = open( SAVE_FOLDER + "t_imagenet_psvit.log","w")
-sys.stdout = log_file
 
 # Hyperparameters
-BATCH_SIZE_TRAIN = 100
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TRAIN = 128
+BATCH_SIZE_TEST = 100
 N_EPOCHS = 200
 
 IMAGE_SIZE = 64
 NUM_CLASS = 200
 PATCH_SIZE = 8
 DEPTH = 9
-HEAD = 12
+HEAD = 4
 EMBED_DIM = 192
 MLP_RATIO = 4
-NUM_ITER = 4
+NUM_ITER = 2
 
-def normalize_transform():
-    return transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
-
-def train_dataset(data_dir):
-    train_dir = os.path.join(data_dir,'train')
-    train_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(IMAGE_SIZE),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        normalize_transform()
-    ])
-    train_set = torchvision.datasets.ImageFolder(train_dir,train_transforms)
-    return train_set
-
-def test_dataset(data_dir):
-    test_dir = os.path.join(data_dir, 'val')
-    test_transforms = transforms.Compose([
-        transforms.RandomResizedCrop(IMAGE_SIZE),
-        transforms.ToTensor(),
-        normalize_transform()
-    ])
-    test_dataset = torchvision.datasets.ImageFolder(test_dir, test_transforms)
-    return test_dataset
-
-def data_loader(data_dir, num_class=10, batch_size_train=100, batch_size_test=1000, workers=2, pin_memory=True):
-    train_set = train_dataset(data_dir)
-    test_set = test_dataset(data_dir)
-    train_indices = (torch.tensor(train_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
-    train_data = torch.utils.data.Subset(train_set,train_indices)
-    test_indices = (torch.tensor(test_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
-    test_data = torch.utils.data.Subset(test_set,test_indices)
-    train_loader = torch.utils.data.DataLoader(
-        train_data,
-        batch_size=batch_size_train,
-        shuffle=True,
-        num_workers=workers,
-        pin_memory=pin_memory,
-        sampler=None
-    )
-    test_loader = torch.utils.data.DataLoader(
-        test_data,
-        batch_size=batch_size_test,
-        shuffle=False,
-        num_workers=workers,
-        pin_memory=pin_memory
-    )
-    return train_loader, test_loader
-
-train_loader,test_loader = data_loader(DOWNLOAD_PATH, num_class=NUM_CLASS, batch_size_train=BATCH_SIZE_TRAIN, batch_size_test=BATCH_SIZE_TEST, workers=2, pin_memory=True)
+train_loader,test_loader = data_loader(DOWNLOAD_PATH, image_size=IMAGE_SIZE, num_class=NUM_CLASS, batch_size_train=BATCH_SIZE_TRAIN, batch_size_test=BATCH_SIZE_TEST, workers=2, pin_memory=True)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -162,14 +126,15 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/t_imagenet_psvit.pth'
+save_path = SAVE_FOLDER + '/t_imagenet_psvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.pth'
+image_path = RESULT_FOLDER + '/t_imagenet_psvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.png'
+
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
-sys.stdout = old_stdout
-log_file.close()
+
 
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.xlabel('accuracy',fontsize=15)
-plt.savefig(SAVE_FOLDER + 't_imagenet_psvit.png', format='png', bbox_inches='tight')
+plt.savefig(image_path, format='png', bbox_inches='tight')

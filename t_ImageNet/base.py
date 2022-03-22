@@ -1,33 +1,43 @@
-from random import shuffle
+# Path definition
+import os
+import sys
+from numpy.core.function_base import add_newdoc
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
+
+from inspect import getsourcefile
+current_path = os.path.abspath(getsourcefile(lambda:0))
+current_dir = os.path.dirname(current_path)
+parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
+sys.path.insert(0, parent_dir)
+
+# Standard imports
 import torch
-import torchvision
-from torchvision import transforms
-import torch.nn.functional as F
-import torch.backends.cudnn as cudnn
 from torch import optim
 from torch.optim import lr_scheduler
+import torch.nn.functional as F
+import torch.backends.cudnn as cudnn
+import torchvision
+from torchvision import transforms
 import time
-import os
 import numpy as np
 import matplotlib.pyplot as plt
-from models.vit_pytorch import ViT, ViT_scatter
-from models.vit_small_data import ViT_small
+from random import shuffle
 
+# From the repository
+from models.vit_pytorch import ViT, ViT_scatter
+# from models.vit_small_data import ViT_small
+
+# DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
+DOWNLOAD_PATH = parent + '/input/dataset/tiny-imagenet-200'
+SAVE_FOLDER = parent + '/checkpoint'
+RESULT_FOLDER = parent + '/log'
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
 os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
 DEVICE_LIST = [0,1,2,3]
-
-# DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
-DOWNLOAD_PATH = './input/dataset/tiny-imagenet-200'
-SAVE_FOLDER = './checkpoint'
-
-# Save output
-import sys
-# old_stdout = sys.stdout
-# log_file = open( SAVE_FOLDER + "t_imagenet_b200.log","w")
-# sys.stdout = log_file
 
 # Hyperparameters
 BATCH_SIZE_TRAIN = 128
@@ -145,6 +155,7 @@ model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS,
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 # scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=0)
+
 model.to(device)
 if device == 'cuda':
     # model = torch.nn.DataParallel(model) # make parallel
@@ -162,16 +173,18 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/t_imagenet_b' + str(N_EPOCHS) + '.pth'
+if not os.path.exists(RESULT_FOLDER):
+    os.mkdir(RESULT_FOLDER)
+
+save_path = SAVE_FOLDER + '/t_imagenet_b' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.pth'
+image_path = RESULT_FOLDER + '/t_imagenet_b' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.png'
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
-# sys.stdout = old_stdout
-# log_file.close()
 
 # model,accuracy_history,test_loss_history=torch.load(SAVE_FOLDER + '/imagenet_b50.pth')
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.ylabel('accuracy',fontsize=15)
-plt.savefig(SAVE_FOLDER + '/t_imagenet_b200.png', format='png', bbox_inches='tight')
+plt.savefig(image_path, format='png', bbox_inches='tight')
 

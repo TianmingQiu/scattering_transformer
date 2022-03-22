@@ -19,8 +19,8 @@ DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
-BATCH_SIZE_TRAIN = 512
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TRAIN = 128
+BATCH_SIZE_TEST = 500
 
 transform_cifar10 = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
@@ -89,7 +89,7 @@ start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
 model = T2T_ViT(img_size=32, num_classes=10, in_chans=3,
-        embed_dim=192, depth=6, num_heads=4)
+        embed_dim=192, depth=9, num_heads=4, mlp_ratio=2)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)

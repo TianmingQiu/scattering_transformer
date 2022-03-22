@@ -27,7 +27,7 @@ log_file = open( SAVE_FOLDER + "t_imagenet_s.log","w")
 sys.stdout = log_file
 
 # Hyperparameters
-BATCH_SIZE_TRAIN = 100
+BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
 N_EPOCHS = 200
 
@@ -35,7 +35,7 @@ IMAGE_SIZE = 64
 NUM_CLASS = 200
 PATCH_SIZE = 8
 DEPTH = 9
-HEAD = 12
+HEAD = 4
 LSA_DIM = 192
 MLP_RATIO = 4
 

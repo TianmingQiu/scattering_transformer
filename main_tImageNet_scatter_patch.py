@@ -14,21 +14,21 @@ from models.vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '4'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset/tiny-imagenet-200'
 SAVE_FOLDER = './checkpoint'
 
 # Save output
-import sys
-old_stdout = sys.stdout
-log_file = open( SAVE_FOLDER + "t_imagenet_s.log","w")
-sys.stdout = log_file
+#import sys
+#old_stdout = sys.stdout
+#log_file = open( SAVE_FOLDER + "/t_imagenet_s.log","w")
+#sys.stdout = log_file
 
 # Hyperparameters
-BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TRAIN = 100
+BATCH_SIZE_TEST = 100
 N_EPOCHS = 200
 
 IMAGE_SIZE = 64
@@ -103,7 +103,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         loss.backward()
         optimizer.step()
 
-        if i % 10 == 0:
+        if i % 100 == 0:
             print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
@@ -164,12 +164,12 @@ if not os.path.exists(SAVE_FOLDER):
 save_path = SAVE_FOLDER + '/t_imagenet_b' + str(N_EPOCHS) + '_s.pth'
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
-sys.stdout = old_stdout
-log_file.close()
+#sys.stdout = old_stdout
+#log_file.close()
 
 # model,accuracy_history,test_loss_history=torch.load(SAVE_FOLDER + '/imagenet_b50.pth')
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)
 plt.xlabel('epoch',fontsize=15)
 plt.xlabel('accuracy',fontsize=15)
-plt.savefig(SAVE_FOLDER + 't_imagenet_s.png', format='png', bbox_inches='tight')
+plt.savefig(SAVE_FOLDER + '/t_imagenet_s.png', format='png', bbox_inches='tight')

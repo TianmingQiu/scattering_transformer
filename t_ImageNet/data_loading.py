@@ -17,7 +17,7 @@ def augmented_transform(image_size=64):
         transforms.RandomResizedCrop(image_size),
         transforms.RandomHorizontalFlip(),
         transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
-        transforms.RandAugment(num_ops=3,magnitude=9,num_magnitude_bins=31,interpolation=transforms.InterpolationMode.BILINEAR),
+        # transforms.RandAugment(num_ops=3,magnitude=9,num_magnitude_bins=31,interpolation=transforms.InterpolationMode.BILINEAR),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
     ])

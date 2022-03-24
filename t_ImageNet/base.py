@@ -42,7 +42,7 @@ DEVICE_LIST = [0,1,2,3]
 # Hyperparameters
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
-N_EPOCHS = 200
+N_EPOCHS = 800
 
 IMAGE_SIZE = 64
 NUM_CLASS = 200
@@ -61,9 +61,9 @@ model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 # optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
-scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
-# scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=0)
+optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-2)
+# scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=1e-8)
 criterion = torch.nn.CrossEntropyLoss()
 
 model.to(device)
@@ -73,6 +73,7 @@ if device == 'cuda':
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
+    quarter = int(len(data_loader)/4)
     criterion = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
     model.train()
     for i, (data, target) in enumerate(data_loader):
@@ -83,7 +84,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
         # loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
-        if i % 100 == 0:
+        if i % quarter == 0:
             print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))

@@ -1,2 +1,0 @@
-Epoch:   1  Learning rate: 1.0e-03
-[    0/100000 (  0%)]  Loss: 5.2916

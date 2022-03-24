@@ -49,7 +49,8 @@ NUM_CLASS = 200
 PATCH_SIZE = 8
 DEPTH = 9
 HEAD = 4
-EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
+EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)*(1+SCATTER_ANGLE)
+EMBED_DIM = int(EMBED_DIM)
 MLP_RATIO = 2
 
 train_loader,test_loader = data_loader(DOWNLOAD_PATH, image_size=IMAGE_SIZE, num_class=NUM_CLASS, batch_size_train=BATCH_SIZE_TRAIN, batch_size_test=BATCH_SIZE_TEST, workers=2, pin_memory=True)
@@ -101,7 +102,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE, num_classes=NUM_CLASS, channels=3,
+model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = 8, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 # model = torch.nn.DataParallel(model)

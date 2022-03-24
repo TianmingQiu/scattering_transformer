@@ -247,12 +247,12 @@ class scatter_patch_ViT(nn.Module):
         self.scatter_layer = 3
 
         self.patch_size = image_size/(2**(scatter_layer-1))
-        self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle, shape=(patch_size,patch_size))
+        self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle, shape=(image_size,image_size))
 
         num_patches = scatter_angle ** (scatter_layer-1)
+        
         patch_dim = int(channels * patch_size ** 2 * (1 + self.scatter_angle)) 
         
-
         self.pos_embedding = nn.Parameter(torch.randn(1, num_patches + 1, dim))
         self.patch_to_embedding = nn.Linear(patch_dim, dim)
         self.cls_token = nn.Parameter(torch.randn(1, 1, dim))
@@ -272,10 +272,19 @@ class scatter_patch_ViT(nn.Module):
 
     def forward(self, img, mask = None):
         p = self.patch_size
-        scattering = self.scatter(img)
-        # x = rearrange(img, 'b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1 = p, p2 = p)
-        x = scattering.view(scattering.shape[0], scattering.shape[1], -1)
+        J = self.scatter_layer 
+        L = self.scatter_angle 
         
+        # img: b  c  h  w
+        _, _, h, w = img.shape
+        assert h == w, 'image height and width must be in the same size'
+        scattering = self.scatter(img)
+        # scattering patch: b  c  h/2**J  w/2**J  (L+1)**J
+        x = rearrange(scattering, 'b c num h w -> b num h w c')
+        # x = rearrange(img, 'b c h/2**J w/2**J (L+1)**J -> b (L+1)**J h/2**J w/2**J c', J = J, L = L)
+        x = x.reshape(x.shape[0], x.shape[1], -1)
+        # x = x.view(x.shape[0], x.shape[1], -1)
+
         x = self.patch_to_embedding(x)
         b, n, _ = x.shape
 

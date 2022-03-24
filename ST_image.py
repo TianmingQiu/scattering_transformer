@@ -148,7 +148,7 @@ model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS,
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-2)
 # scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
-scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, T_mult=1, eta_min=1e-8)
+scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=1e-8)
 
 model.to(device)
 if device == 'cuda':

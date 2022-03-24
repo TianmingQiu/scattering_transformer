@@ -243,17 +243,16 @@ class scatter_patch_ViT(nn.Module):
     def __init__(self, *, scatter_angle, scatter_layer, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
 
-        self.scatter_angle = 8
-        self.scatter_layer = 3
+        self.scatter_angle = scatter_angle
+        self.scatter_layer = scatter_layer
 
-        self.patch_size = image_size/(2**(scatter_layer-1))
+        self.patch_size = image_size // (2 ** scatter_layer)
         self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle, shape=(image_size,image_size))
 
         num_patches = scatter_angle ** (scatter_layer-1)
         
-        patch_dim = int(channels * patch_size ** 2 * (1 + self.scatter_angle)) 
-        
-        self.pos_embedding = nn.Parameter(torch.randn(1, num_patches + 1, dim))
+        patch_dim = channels * (patch_size ** 2)
+        self.angle_embedding = nn.Parameter(torch.randn(1, 100, dim))
         self.patch_to_embedding = nn.Linear(patch_dim, dim)
         self.cls_token = nn.Parameter(torch.randn(1, 1, dim))
         self.dropout = nn.Dropout(emb_dropout)
@@ -290,7 +289,7 @@ class scatter_patch_ViT(nn.Module):
 
         cls_tokens = self.cls_token.expand(b, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
-        x += self.pos_embedding[:, :(n + 1)]
+        x += self.angle_embedding[:, :(n + 1)]
         x = self.dropout(x)
 
         x = self.transformer(x, mask)

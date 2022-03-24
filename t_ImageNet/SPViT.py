@@ -34,8 +34,8 @@ RESULT_FOLDER = parent + '/log'
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '4,5,6,7'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
+DEVICE_LIST = [0,1]
 
 # Hyperparameters
 BATCH_SIZE_TRAIN = 128
@@ -43,13 +43,13 @@ BATCH_SIZE_TEST = 100
 N_EPOCHS = 200
 
 IMAGE_SIZE = 64
-SCATTER_LAYER = 3
+SCATTER_LAYER = 2
 SCATTER_ANGLE = 4
 NUM_CLASS = 200
-PATCH_SIZE = 8
+PATCH_SIZE = 16
 DEPTH = 9
 HEAD = 4
-EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)*(1+SCATTER_ANGLE)
+EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
 EMBED_DIM = int(EMBED_DIM)
 MLP_RATIO = 2
 
@@ -102,11 +102,12 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = 8, num_classes=NUM_CLASS, channels=3,
+model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 # model = torch.nn.DataParallel(model)
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
+# optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)
+optimizer = optim.AdamW(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
@@ -129,8 +130,8 @@ if not os.path.exists(SAVE_FOLDER):
 if not os.path.exists(RESULT_FOLDER):
     os.mkdir(RESULT_FOLDER)
     
-save_path = SAVE_FOLDER + '/t_imagenet_stvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.pth'
-image_path = RESULT_FOLDER + '/t_imagenet_stvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.png'
+save_path = SAVE_FOLDER + '/t_imagenet_spvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.pth'
+image_path = RESULT_FOLDER + '/t_imagenet_spvit_' + str(PATCH_SIZE)+ '-' + str(DEPTH) + '.png'
 
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)

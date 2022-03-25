@@ -28,14 +28,16 @@ DATASET_TYPE = 'CIFAR10' # STL10 or CIFAR10
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
 
-N_EPOCHS = 500
-
+N_EPOCHS = 200
 NUM_CLASS = 10
-DEPTH = 9
-HEAD = 4
+DEPTH = 6
+HEAD = 8
 EMBED_DIM = 192
 MLP_RATIO = 2
 K = 25
+
+save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.pth'
+image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.png'
 
 # image transform
 transform_mnist = transforms.Compose([transforms.ToTensor(),
@@ -109,7 +111,7 @@ def train_epoch(model, optimizer, data_loader, loss_history):
                 #plt.imshow(image / image.abs().mean() * 0.4)
                # print(image.abs().mean())
                 #plt.show()
-            #pause()
+            # pause()
             loss_history.append(loss.item())
 
 def evaluate(model, data_loader, loss_history, acc_history):
@@ -143,12 +145,16 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 start_time = time.time()
+
 model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
-optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-2)
-# scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
-scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=1e-8)
+model_dict,accuracy_history,test_loss_history = torch.load(save_path)
+model.load_state_dict(model_dict)
+
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+# scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=1e-8)
 
 model.to(device)
 if device == 'cuda':
@@ -160,8 +166,8 @@ for epoch in range(1, N_EPOCHS + 1):
     print('Epoch:' + '{:4}'.format(epoch), ' Learning rate: ' + '{:.1e}'.format(optimizer.param_groups[0]['lr']))
     train_epoch(model, optimizer, train_loader, train_loss_history)
     evaluate(model, test_loader, test_loss_history, accuracy_history)
-    # scheduler.step(test_loss_history[-1])
-    scheduler.step()
+    scheduler.step(test_loss_history[-1])
+    # scheduler.step()
 
 print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 
@@ -170,13 +176,9 @@ if not os.path.exists(SAVE_FOLDER):
 if not os.path.exists(RESULT_FOLDER):
     os.mkdir(RESULT_FOLDER)
 
-save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.pth'
-image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.png'
 
 torch.save((model.state_dict(),accuracy_history,test_loss_history), save_path)
 print('Model saved to', save_path)
-
-# model,accuracy_history,test_loss_history = load(model,SAVE_FOLDER + '/t_imagenet_b50.pth')
 
 plt.figure(figsize=(6,5))
 plt.plot(np.arange(N_EPOCHS),torch.stack(accuracy_history).cpu().numpy(), c='black', label='ViT', linewidth=2)

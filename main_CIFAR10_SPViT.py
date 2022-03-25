@@ -14,23 +14,22 @@ from models.vit_pytorch import ViT, ViT_scatter, scatter_patch_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '5'
-DEVICE_LIST = [0]
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
+DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 
 # Hyperparameters
 
-BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 500
-
+BATCH_SIZE_TRAIN = 200
+BATCH_SIZE_TEST = 1000
 N_EPOCHS = 200
 
 IMAGE_SIZE = 32
 SCATTER_LAYER = 2
 SCATTER_ANGLE = 4
-NUM_CLASS = 200
+NUM_CLASS = 10
 PATCH_SIZE = 8
 DEPTH = 9
 HEAD = 4
@@ -100,7 +99,7 @@ def evaluate(model, data_loader, loss_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 200
+
 
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
@@ -112,7 +111,7 @@ model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, 
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
-scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
 if device == 'cuda':

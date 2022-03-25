@@ -29,7 +29,7 @@ IMAGE_SIZE = 96
 SCATTER_LAYER = 2
 SCATTER_ANGLE = 4
 NUM_CLASS = 10
-PATCH_SIZE = 8
+PATCH_SIZE = 24
 DEPTH = 9
 HEAD = 4
 EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
@@ -95,7 +95,6 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:5}'.format(total_samples) + ' (' +
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
-N_EPOCHS = 200
 
 start_time = time.time()
 

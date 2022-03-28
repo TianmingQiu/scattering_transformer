@@ -111,7 +111,7 @@ model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, 
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
-scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=6, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
 if device == 'cuda':

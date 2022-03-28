@@ -34,8 +34,8 @@ RESULT_FOLDER = parent + '/log'
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
-DEVICE_LIST = [0,1]
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+DEVICE_LIST = [0]
 
 # Hyperparameters
 BATCH_SIZE_TRAIN = 128

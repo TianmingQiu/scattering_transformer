@@ -17,14 +17,14 @@ from models.vit_pytorch import ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,3,5,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,3,5,7'
 DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
-DATASET_TYPE = 'CIFAR10' # STL10 or CIFAR10
+DATASET_TYPE = 'STL10' # STL10 or CIFAR10
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
 
@@ -149,8 +149,8 @@ start_time = time.time()
 model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
-model_dict,accuracy_history,test_loss_history = torch.load(save_path)
-model.load_state_dict(model_dict)
+# model_dict,accuracy_history,test_loss_history = torch.load(save_path)
+# model.load_state_dict(model_dict)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, verbose=True, min_lr=1e-3*1e-5, factor=0.1)

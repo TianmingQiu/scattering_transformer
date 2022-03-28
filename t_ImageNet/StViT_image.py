@@ -43,12 +43,13 @@ RESULT_FOLDER = parent + '/log'
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
 
-N_EPOCHS = 800
+N_EPOCHS = 200
 IMAGE_SIZE = 64
+
 NUM_CLASS = 200
 PATCH_SIZE = 2
 DEPTH = 9
-HEAD = 4
+HEAD = 8
 EMBED_DIM = 192
 MLP_RATIO = 2
 K = 25
@@ -78,15 +79,6 @@ def train_epoch(model, optimizer, data_loader, loss_history):
             print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
-            #plt.imshow(torch.permute(data[0], (1,2,0)))
-            #plt.show()
-            #scattered_data = scattering(data)
-            #for i in range(scattered_data.shape[2]):
-                #image = torch.permute(scattered_data,(0,2,3,4,1))[0,i]
-                #plt.imshow(image / image.abs().mean() * 0.4)
-               # print(image.abs().mean())
-                #plt.show()
-            #pause()
             loss_history.append(loss.item())
 
 def evaluate(model, data_loader, loss_history, acc_history):
@@ -99,10 +91,10 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
     with torch.no_grad():
         for data, target in data_loader:
-            data, target = scattering(data).to(device), target.to(device)
+            scattered_data, target = scattering(data).to(device), target.to(device)
             # data[:,:,0,:,:] /= 3
-            data = rearrange(data, 'b c x h d -> b (c x) h d')
-            output = F.log_softmax(model(data), dim=1)
+            scattered_data = rearrange(scattered_data, 'b c x h d -> b (c x) h d')
+            output = F.log_softmax(model(scattered_data), dim=1)
             # loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
             _, pred = torch.max(output, dim=1)
@@ -120,10 +112,10 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 start_time = time.time()
-model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
+model = ViT(image_size=int(IMAGE_SIZE/4), patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
-optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-2)
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
 # scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=10, eta_min=1e-8)
 

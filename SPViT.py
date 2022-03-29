@@ -8,33 +8,47 @@ from torch import optim
 from torch.optim import lr_scheduler
 import time
 import os
-import argparse
 import numpy as np
 from kymatio.torch import Scattering2D
 from einops import rearrange
 from matplotlib import pyplot as plt
 
-from models.vit_pytorch import ViT
-from input.dataset import Flowers102Dataset
+from models.vit_pytorch import ViT, scatter_patch_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,5,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,3,5,7'
 DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
+DATASET_TYPE = 'STL10' # STL10 or CIFAR10
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 1000
 
-N_EPOCHS = 100
-
-
+N_EPOCHS = 200
+NUM_CLASS = 10
+DEPTH = 6
+HEAD = 8
 EMBED_DIM = 192
 MLP_RATIO = 2
 K = 25
+
+IMAGE_SIZE = 96
+SCATTER_LAYER = 3
+SCATTER_ANGLE = 4
+NUM_CLASS = 10
+PATCH_SIZE = 12
+DEPTH = 6
+HEAD = 4
+EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
+EMBED_DIM = int(EMBED_DIM)
+MLP_RATIO = 2
+
+save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.pth'
+image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.png'
 
 # image transform
 transform_mnist = transforms.Compose([transforms.ToTensor(),
@@ -54,57 +68,27 @@ transform_stl10 = transforms.Compose([
     transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
 ])
 
-transform_flowers = transforms.Compose([
-    transforms.RandomResizedCrop(96),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
-])
-
-# define dataset
-parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, required=True)
-DATASET_TYPE = parser.parse_args().dataset
-
 if DATASET_TYPE == 'STL10':
     train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
                                        transform=transform_stl10)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+
     test_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='test', download=True,
                                       transform=transform_stl10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 96
-    PATCH_SIZE = 2
-    NUM_CLASS = 10
-    DEPTH = 6
-    HEAD = 4
-    
+ 
+
 elif DATASET_TYPE == 'CIFAR10':
     train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
                                        transform=transform_cifar10)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+
     test_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=False, download=True,
                                       transform=transform_cifar10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 32
     PATCH_SIZE = 1
-    NUM_CLASS = 10
-    DEPTH = 10
-    HEAD = 8
-
-elif DATASET_TYPE == 'FLOWERS':
-    train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
-    train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-    test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
-    test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
-    IMAGE_SIZE = 96
-    PATCH_SIZE = 2
-    NUM_CLASS = 102
-    DEPTH = 10
-    HEAD = 8
-
-save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.pth'
-image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 scattering = Scattering2D(J=2, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
@@ -116,18 +100,18 @@ def train_epoch(model, optimizer, data_loader, loss_history):
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
-        scattered_data, target = scattering(data).to(device), target.to(device)
+        data, target = data.to(device), target.to(device)
         # scattered_data[:,:,0,:,:] /= 3
-        scattered_data = rearrange(scattered_data, 'b c x h d -> b (c x) h d')
+        
         optimizer.zero_grad()
-        output = F.log_softmax(model(scattered_data), dim=1)
+        output = F.log_softmax(model(data), dim=1)
         # loss = F.nll_loss(output, target)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
         
         if i % quarter == 0:
-            print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
+            print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
             #plt.imshow(torch.permute(data[0], (1,2,0)))
@@ -151,9 +135,8 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
     with torch.no_grad():
         for data, target in data_loader:
-            data, target = scattering(data).to(device), target.to(device)
+            data, target = data.to(device), target.to(device)
             # data[:,:,0,:,:] /= 3
-            data = rearrange(data, 'b c x h d -> b (c x) h d')
             output = F.log_softmax(model(data), dim=1)
             # loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
@@ -173,7 +156,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
+model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

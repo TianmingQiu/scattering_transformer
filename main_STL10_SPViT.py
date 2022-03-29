@@ -12,7 +12,7 @@ from models.vit_pytorch import ViT, ViT_scatter, scatter_patch_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,3,5,7'
 DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'

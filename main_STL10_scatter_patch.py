@@ -12,8 +12,8 @@ from models.vit_pytorch import ViT, ViT_scatter
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
-DEVICE_LIST = [0]
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,7'
+DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'

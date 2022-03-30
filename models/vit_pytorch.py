@@ -5,11 +5,30 @@ from torch import conv2d, nn
 from einops import rearrange
 import warnings
 from kymatio.torch import Scattering2D
+from tqdm import tqdm
 
 # from models.ps_vit import conv3x3
 
 SUGGEST_NUM_PATCHES = 16
 MIN_NUM_PATCHES = 4
+
+def generate_location_matrix(patch_number=12):
+    total_patch_number = patch_number ** 2
+    loc = torch.zeros((total_patch_number,total_patch_number)).cuda()
+    
+    # for k in range(total_patch_number):
+    #     i,j = k // patch_number, k % patch_number
+    #     for kk in range(total_patch_number):
+    #         ii,jj = kk // patch_number, kk % patch_number
+    #         dist = ((ii-i)**2 + (jj-j)**2) ** 0.5
+    #         loc[k,kk] += dist
+    for k in range(total_patch_number):
+        for kk in range(total_patch_number):
+            loc[k,kk] += abs(k-kk)
+    return loc
+
+GLOBAL_ATTENTION_STATS = []
+GLOBAL_LOC_MATRIX = generate_location_matrix()
 class Residual(nn.Module):
     def __init__(self, fn):
         super().__init__()
@@ -65,6 +84,18 @@ class Attention(nn.Module):
             del mask
 
         attn = dots.softmax(dim=-1)
+        dots_= dots[:,:,1:,1:]
+        attn_= dots_.softmax(dim=-1)
+        n -= 1
+        
+        for batch in tqdm(range(b)):
+            local_dist = []
+            for head in range(self.heads):
+                local_head_dist = []
+                for i in range(n):
+                    local_head_dist.append(sum(attn_[batch,head,i] * GLOBAL_LOC_MATRIX[i]))
+                local_dist.append(sum(local_head_dist) / len(local_head_dist))
+            GLOBAL_ATTENTION_STATS.append(sorted(local_dist))
 
         out = torch.einsum('bhij,bhjd->bhid', attn, v)
         out = rearrange(out, 'b h n d -> b n (h d)')
@@ -130,12 +161,13 @@ class ViT(nn.Module):
         x = self.transformer(x, mask)
 
         x = self.to_cls_token(x[:, 0])
+        torch.save(GLOBAL_ATTENTION_STATS,'attention.pth')
         return self.mlp_head(x)
 
 class ViT_scatter(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
-        self.scatter_angle = 4
+        self.scatter_angle = 6
         self.scatter_layer = 1
         self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle,
                                     shape=(patch_size,patch_size))
@@ -182,6 +214,7 @@ class ViT_scatter(nn.Module):
         x = self.transformer(x, mask)
 
         x = self.to_cls_token(x[:, 0])
+        torch.save(GLOBAL_ATTENTION_STATS,'attention_s.pth')
         return self.mlp_head(x)
 
 '''

@@ -136,12 +136,16 @@ class ViT_scatter(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
         self.scatter_angle = 4
-        self.scatter_layer = 1
+        self.scatter_layer = 2
+        L = self.scatter_angle
+        J = self.scatter_layer
+        K = 1 + L*J + L**2*J*(J-1)/2
         self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle,
                                     shape=(patch_size,patch_size))
         assert image_size % patch_size == 0, 'image dimensions must be divisible by the patch size'
         num_patches = (image_size // patch_size) ** 2
-        patch_dim = int(channels * patch_size ** 2 / 4 * (1 + self.scatter_angle))
+        # patch_dim = int(channels * patch_size ** 2 / 4 * (1 + self.scatter_angle))
+        patch_dim = int(channels * K * patch_size ** 2 / 16)
         if num_patches <= SUGGEST_NUM_PATCHES:
             warnings.warn(f'Your number of patches ({num_patches}) may be too small for attention to be effective.')
         assert num_patches > MIN_NUM_PATCHES, f'Your number of patches ({num_patches}) is way too small for attention to be effective. Try decreasing your patch size.'

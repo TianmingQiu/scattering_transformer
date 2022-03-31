@@ -14,7 +14,7 @@ from models.vit_pytorch import ViT, ViT_scatter, scatter_patch_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,4'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,5,6'
 DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
@@ -27,10 +27,10 @@ BATCH_SIZE_TEST = 1000
 N_EPOCHS = 200
 
 IMAGE_SIZE = 32
-SCATTER_LAYER = 2
+SCATTER_LAYER = 3
 SCATTER_ANGLE = 4
 NUM_CLASS = 10
-PATCH_SIZE = 8
+PATCH_SIZE = 4
 DEPTH = 9
 HEAD = 4
 EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)

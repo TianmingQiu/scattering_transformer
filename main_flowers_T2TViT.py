@@ -9,29 +9,30 @@ import time
 import os
 
 from models.vit_pytorch import ViT, ViT_scatter
+from input.dataset import Flowers102Dataset
+from models.t2t_vit import T2T_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3,7'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
-BATCH_SIZE_TRAIN = 100
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TRAIN = 128
+BATCH_SIZE_TEST = 72
 
-transform_stl10 = transforms.Compose([
+transform_flowers = transforms.Compose([
+    transforms.RandomResizedCrop(96),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
 ])
 
-train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
-                                       transform=transform_stl10)
+train_set = Flowers102Dataset(DOWNLOAD_PATH, split='test', transform=transform_flowers)
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
 
-test_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='test', download=True,
-                                      transform=transform_stl10)
+test_set = Flowers102Dataset(DOWNLOAD_PATH, split='train',  transform=transform_flowers)
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -82,14 +83,14 @@ def evaluate(model, data_loader, loss_history, acc_history):
 N_EPOCHS = 200
 
 start_time = time.time()
-# model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
-#             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT_scatter(image_size=96, patch_size=8, num_classes=10, channels=3,
-        dim=512, depth=6, heads=8, mlp_dim=512*4, dropout=0.1, emb_dropout=0.1)
-# model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
+# model = ViT(image_size=96, patch_size=8, num_classes=102, channels=3,
+#         dim=192, depth=10, heads=8, mlp_dim=192*4, dropout=0.1, emb_dropout=0.1)
+model = T2T_ViT(img_size=96, num_classes=102, in_chans=3,
+        embed_dim=192*4, depth=10, num_heads=8)
+
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
-scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
 model.to(device)
 if device == 'cuda':
@@ -108,6 +109,6 @@ print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 if not os.path.exists(SAVE_FOLDER):
     os.mkdir(SAVE_FOLDER)
 
-save_path = SAVE_FOLDER + '/stl_b' + str(N_EPOCHS) + '_s.pth'
+save_path = SAVE_FOLDER + '/flowers_t2t.pth'
 torch.save((model.state_dict(),accuracy_history), save_path)
 print('Model saved to', save_path)

@@ -133,10 +133,10 @@ class ViT(nn.Module):
         return self.mlp_head(x)
 
 class scatter_patch_ViT(nn.Module):
-    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
+    def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0., scatter_layer = 1, scatter_angle = 6):
         super().__init__()
-        self.scatter_angle = 6
-        self.scatter_layer = 1
+        self.scatter_angle = scatter_angle
+        self.scatter_layer = scatter_layer
         self.scatter = Scattering2D(J=self.scatter_layer,L=self.scatter_angle,
                                     shape=(patch_size,patch_size))
         assert image_size % patch_size == 0, 'image dimensions must be divisible by the patch size'

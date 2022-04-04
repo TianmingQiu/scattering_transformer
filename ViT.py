@@ -74,10 +74,11 @@ if DATASET_TYPE == 'STL10':
                                       transform=transform_stl10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 96
-    PATCH_SIZE = 2
+    PATCH_SIZE = 8
     NUM_CLASS = 10
     DEPTH = 6
     HEAD = 4
+    EMBED_DIM = 512
     
 elif DATASET_TYPE == 'CIFAR10':
     train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
@@ -87,10 +88,11 @@ elif DATASET_TYPE == 'CIFAR10':
                                       transform=transform_cifar10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 32
-    PATCH_SIZE = 1
+    PATCH_SIZE = 4
     NUM_CLASS = 10
     DEPTH = 10
     HEAD = 8
+    EMBED_DIM = 192
 
 elif DATASET_TYPE == 'FLOWERS':
     train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
@@ -98,13 +100,14 @@ elif DATASET_TYPE == 'FLOWERS':
     test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 96
-    PATCH_SIZE = 2
+    PATCH_SIZE = 8
     NUM_CLASS = 102
     DEPTH = 10
     HEAD = 8
+    EMBED_DIM = 512
 
-save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.pth'
-image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.png'
+save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
+image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 scattering = Scattering2D(J=2, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)

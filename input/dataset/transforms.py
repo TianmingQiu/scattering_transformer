@@ -23,3 +23,10 @@ transform_flowers = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
 ])
+
+transform_tImageNet = transforms.Compose([
+    transforms.RandomHorizontalFlip(),
+    transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
+])

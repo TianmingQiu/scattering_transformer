@@ -10,7 +10,6 @@ import time
 import os
 import argparse
 import numpy as np
-from kymatio.torch import Scattering2D
 from einops import rearrange
 from matplotlib import pyplot as plt
 
@@ -27,14 +26,10 @@ SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
 BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 500
+BATCH_SIZE_TEST = 128
 
-N_EPOCHS = 100
-
-
-EMBED_DIM = 192
+N_EPOCHS = 200
 MLP_RATIO = 2
-K = 25
 
 # image transform
 transform_mnist = transforms.Compose([transforms.ToTensor(),
@@ -63,7 +58,7 @@ transform_flowers = transforms.Compose([
 
 # define dataset
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, required=True)
+parser.add_argument('--dataset', type=str, default='STL10')
 DATASET_TYPE = parser.parse_args().dataset
 
 if DATASET_TYPE == 'STL10':
@@ -106,31 +101,28 @@ elif DATASET_TYPE == 'FLOWERS':
     HEAD = 8
     EMBED_DIM = 512
 
-save_path = SAVE_FOLDER + '/svitimage' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
-image_path = RESULT_FOLDER + '/svitimage' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
+save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.pth'
+image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-scattering = Scattering2D(J=2, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
     quarter = int(len(data_loader)/4)
-    criterion = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
+    criterion = torch.nn.CrossEntropyLoss()
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
-        scattered_data, target = scattering(data).to(device), target.to(device)
-        # scattered_data[:,:,0,:,:] /= 3
-        scattered_data = rearrange(scattered_data, 'b c x h d -> b (c x) h d')
+        data, target = data.to(device), target.to(device)
+        
         optimizer.zero_grad()
-        output = F.log_softmax(model(scattered_data), dim=1)
-        # loss = F.nll_loss(output, target)
+        output = F.log_softmax(model(data), dim=1)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
         
         if i % quarter == 0:
-            print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
+            print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
             loss_history.append(loss.item())
@@ -145,9 +137,8 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
     with torch.no_grad():
         for data, target in data_loader:
-            data, target = scattering(data).to(device), target.to(device)
+            data, target = data.to(device), target.to(device)
             # data[:,:,0,:,:] /= 3
-            data = rearrange(data, 'b c x h d -> b (c x) h d')
             output = F.log_softmax(model(data), dim=1)
             # loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
@@ -167,7 +158,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
+model = ViT(image_size=IMAGE_SIZE, patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

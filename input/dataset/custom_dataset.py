@@ -1,7 +1,9 @@
 import os
 from os import path
+import torch
 from torch.utils.data import Dataset
 from torchvision.io import read_image
+import torchvision
 from scipy.io import loadmat
 import PIL.Image
 
@@ -38,3 +40,29 @@ class Flowers102Dataset(Dataset):
         if self.target_transform:
             label = self.target_transform(label)
         return image, label
+
+
+class tinyImageNet(Dataset):
+    def __init__(self, dir, split = 'train', transform=None, target_transform=None, num_class = 10):
+        self.dir = path.join(dir, 'tiny-imagenet-200')
+        self.transform = transform
+        self.target_transform = target_transform
+        self.img_folder = path.join(self.dir, 'jpg')
+
+        assert split in ['train','split']
+        if split == 'train':
+            self.dir = os.path.join(self.dir,'train')
+            image_set = torchvision.datasets.ImageFolder(self.dir,transform)
+        elif split == 'test':
+            self.dir = os.path.join(self.dir,'val')
+            image_set = torchvision.datasets.ImageFolder(self.dir,transform)
+
+        indices = (torch.tensor(image_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
+        self.data = torch.utils.data.Subset(image_set,indices)
+        pass
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx]

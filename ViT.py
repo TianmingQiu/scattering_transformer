@@ -14,7 +14,7 @@ from einops import rearrange
 from matplotlib import pyplot as plt
 
 from models.vit_pytorch import ViT
-from input.dataset import Flowers102Dataset
+from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
@@ -30,31 +30,6 @@ BATCH_SIZE_TEST = 128
 
 N_EPOCHS = 200
 MLP_RATIO = 2
-
-# image transform
-transform_mnist = transforms.Compose([transforms.ToTensor(),
-                               transforms.Normalize((0.1307,), (0.3081,))])
-
-transform_cifar10 = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.Resize(32),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-])
-
-transform_stl10 = transforms.Compose([
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
-])
-
-transform_flowers = transforms.Compose([
-    transforms.RandomResizedCrop(96),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
-])
 
 # define dataset
 parser = argparse.ArgumentParser()
@@ -101,8 +76,8 @@ elif DATASET_TYPE == 'FLOWERS':
     HEAD = 8
     EMBED_DIM = 512
 
-save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.pth'
-image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.png'
+save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
+image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

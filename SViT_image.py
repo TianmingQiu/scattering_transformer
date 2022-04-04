@@ -15,7 +15,7 @@ from einops import rearrange
 from matplotlib import pyplot as plt
 
 from models.vit_pytorch import ViT
-from input.dataset import Flowers102Dataset
+from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
@@ -31,39 +31,13 @@ BATCH_SIZE_TEST = 500
 
 N_EPOCHS = 100
 
-
 EMBED_DIM = 192
 MLP_RATIO = 2
 K = 25
 
-# image transform
-transform_mnist = transforms.Compose([transforms.ToTensor(),
-                               transforms.Normalize((0.1307,), (0.3081,))])
-
-transform_cifar10 = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.Resize(32),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-])
-
-transform_stl10 = transforms.Compose([
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
-])
-
-transform_flowers = transforms.Compose([
-    transforms.RandomResizedCrop(96),
-    transforms.RandomHorizontalFlip(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
-])
-
 # define dataset
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, required=True)
+parser.add_argument('--dataset', type=str, default='STL10')
 DATASET_TYPE = parser.parse_args().dataset
 
 if DATASET_TYPE == 'STL10':

@@ -59,7 +59,6 @@ class tinyImageNet(Dataset):
 
         indices = (torch.tensor(image_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
         self.data = torch.utils.data.Subset(image_set,indices)
-        pass
 
     def __len__(self):
         return len(self.data)

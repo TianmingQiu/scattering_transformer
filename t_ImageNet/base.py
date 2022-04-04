@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 from random import shuffle
 
 # From the repository
-from models.vit_pytorch import ViT, ViT_scatter
+from models.vit_pytorch import ViT, scatter_patch_ViT
 from data_loading import data_loader
 # from models.vit_small_data import ViT_small
 

@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 from random import shuffle
 
 # From the repository
-from models.vit_pytorch import ViT, ViT_scatter, scatter_freq_ViT
+from models.vit_pytorch import ViT, scatter_patch_ViT, scatter_freq_ViT
 from data_loading import data_loader
 
 # DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'

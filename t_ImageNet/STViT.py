@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 from random import shuffle
 
 # From the repository
-from models.vit_pytorch import ViT, ViT_scatter
+from models.vit_pytorch import ViT, scatter_patch_ViT
 from data_loading import data_loader
 
 # DOWNLOAD_PATH = './input/dataset/Imagenet/Data/CLS-LOC'
@@ -100,7 +100,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = ViT_scatter(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+model = scatter_patch_ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 # model.load_state_dict(torch.load(SAVE_FOLDER + '/cifar_d2_b' + str(N_EPOCHS) + '.pth'))
 # model = torch.nn.DataParallel(model)

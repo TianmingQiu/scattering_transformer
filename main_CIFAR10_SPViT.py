@@ -10,7 +10,7 @@ import time
 import os
 
 
-from models.vit_pytorch import ViT, ViT_scatter, scatter_freq_ViT
+from models.vit_pytorch import ViT, scatter_patch_ViT, scatter_freq_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)

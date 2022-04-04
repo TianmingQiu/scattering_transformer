@@ -10,7 +10,7 @@ import time
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from models.vit_pytorch import ViT, ViT_scatter
+from models.vit_pytorch import ViT, scatter_patch_ViT
 from models.vit_small_data import ViT_small
 
 

@@ -14,7 +14,7 @@ from kymatio.torch import Scattering2D
 from einops import rearrange
 from matplotlib import pyplot as plt
 
-from models.vit_pytorch import scatter_freq_ViT
+from models.vit_pytorch import scatter_patch_ViT
 from input.dataset import Flowers102Dataset
 
 torch.manual_seed(42)

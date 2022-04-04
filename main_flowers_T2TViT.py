@@ -8,7 +8,7 @@ from torch.optim import lr_scheduler
 import time
 import os
 
-from models.vit_pytorch import ViT, ViT_scatter
+from models.vit_pytorch import ViT, scatter_patch_ViT
 from input.dataset import Flowers102Dataset
 from models.t2t_vit import T2T_ViT
 

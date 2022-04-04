@@ -10,7 +10,7 @@ import time
 import os
 
 
-from models.vit_pytorch import ViT, ViT_scatter, scatter_patch_ViT
+from models.vit_pytorch import ViT, ViT_scatter, scatter_freq_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
@@ -104,7 +104,7 @@ def evaluate(model, data_loader, loss_history):
 start_time = time.time()
 # model = ViT(image_size=32, patch_size=4, num_classes=10, channels=3,
 #             dim=512, depth=6, heads=8, mlp_dim=512, dropout=0.1, emb_dropout=0.1)
-model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+model = scatter_freq_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 # model = ViT_scatter(image_size=32, patch_size=8, num_classes=10, channels=3,
 #        dim=192, depth=9, heads=4, mlp_dim=2*192, dropout=0.1, emb_dropout=0.1)

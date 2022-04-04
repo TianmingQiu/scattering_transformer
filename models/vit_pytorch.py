@@ -239,7 +239,7 @@ class ViT_with_conv_head(nn.Module):
         return self.mlp_head(x)
 '''
 
-class scatter_patch_ViT(nn.Module):
+class scatter_freq_ViT(nn.Module):
     def __init__(self, *, scatter_angle, scatter_layer, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
 

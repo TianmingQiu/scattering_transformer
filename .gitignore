@@ -147,3 +147,6 @@ log/
 # Ignore batch/plot commands
 batch_command.py
 plot_to_output.py
+
+# Ignore workspace
+workspace/

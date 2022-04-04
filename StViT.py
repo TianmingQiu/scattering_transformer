@@ -19,15 +19,15 @@ from input.dataset import Flowers102Dataset
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,5,7'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
 BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TEST = 500
 
 N_EPOCHS = 100
 
@@ -130,15 +130,6 @@ def train_epoch(model, optimizer, data_loader, loss_history):
             print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
-            #plt.imshow(torch.permute(data[0], (1,2,0)))
-            #plt.show()
-            #scattered_data = scattering(data)
-            #for i in range(scattered_data.shape[2]):
-                #image = torch.permute(scattered_data,(0,2,3,4,1))[0,i]
-                #plt.imshow(image / image.abs().mean() * 0.4)
-               # print(image.abs().mean())
-                #plt.show()
-            # pause()
             loss_history.append(loss.item())
 
 def evaluate(model, data_loader, loss_history, acc_history):
@@ -194,7 +185,6 @@ for epoch in range(1, N_EPOCHS + 1):
     train_epoch(model, optimizer, train_loader, train_loss_history)
     evaluate(model, test_loader, test_loss_history, accuracy_history)
     scheduler.step(test_loss_history[-1])
-    # scheduler.step()
 
 print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 

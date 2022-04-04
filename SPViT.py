@@ -8,6 +8,7 @@ from torch import optim
 from torch.optim import lr_scheduler
 import time
 import os
+import argparse
 import numpy as np
 from kymatio.torch import Scattering2D
 from einops import rearrange
@@ -17,16 +18,15 @@ from models.vit_pytorch import ViT, scatter_patch_ViT
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,3,5,7'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
-DATASET_TYPE = 'STL10' # STL10 or CIFAR10
 BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 1000
+BATCH_SIZE_TEST = 500
 
 N_EPOCHS = 200
 NUM_CLASS = 10
@@ -47,9 +47,6 @@ EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
 EMBED_DIM = int(EMBED_DIM)
 MLP_RATIO = 2
 
-save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.pth'
-image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s.png'
-
 # image transform
 transform_mnist = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize((0.1307,), (0.3081,))])
@@ -67,6 +64,11 @@ transform_stl10 = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4, 0.4, 0.4), (0.2, 0.2, 0.2)),
 ])
+
+# define dataset
+parser = argparse.ArgumentParser()
+parser.add_argument('--dataset', type=str, default='STL10')
+DATASET_TYPE = parser.parse_args().dataset
 
 if DATASET_TYPE == 'STL10':
     train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
@@ -90,13 +92,15 @@ elif DATASET_TYPE == 'CIFAR10':
     IMAGE_SIZE = 32
     PATCH_SIZE = 1
 
+save_path = SAVE_FOLDER + '/' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.pth'
+image_path = RESULT_FOLDER + '/' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '_s_1.png'
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-scattering = Scattering2D(J=2, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
     quarter = int(len(data_loader)/4)
-    criterion = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
+    criterion = torch.nn.CrossEntropyLoss()
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
@@ -114,15 +118,6 @@ def train_epoch(model, optimizer, data_loader, loss_history):
             print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
-            #plt.imshow(torch.permute(data[0], (1,2,0)))
-            #plt.show()
-            #scattered_data = scattering(data)
-            #for i in range(scattered_data.shape[2]):
-                #image = torch.permute(scattered_data,(0,2,3,4,1))[0,i]
-                #plt.imshow(image / image.abs().mean() * 0.4)
-               # print(image.abs().mean())
-                #plt.show()
-            # pause()
             loss_history.append(loss.item())
 
 def evaluate(model, data_loader, loss_history, acc_history):
@@ -177,7 +172,6 @@ for epoch in range(1, N_EPOCHS + 1):
     train_epoch(model, optimizer, train_loader, train_loss_history)
     evaluate(model, test_loader, test_loss_history, accuracy_history)
     scheduler.step(test_loss_history[-1])
-    # scheduler.step()
 
 print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 

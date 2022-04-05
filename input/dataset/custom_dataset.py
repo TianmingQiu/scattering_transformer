@@ -49,7 +49,7 @@ class tinyImageNet(Dataset):
         self.target_transform = target_transform
         self.img_folder = path.join(self.dir, 'jpg')
 
-        assert split in ['train','split']
+        assert split in ['train','test']
         if split == 'train':
             self.dir = os.path.join(self.dir,'train')
             image_set = torchvision.datasets.ImageFolder(self.dir,transform)

@@ -78,6 +78,20 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
         HEAD = 8
         EMBED_DIM = 512
 
+    elif DATASET_TYPE == 'TINYIMAGENET':
+        train_set = tinyImageNet(DOWNLOAD_PATH, split='train', transform=transform_tImageNet, num_class=50)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+        test_set = tinyImageNet(DOWNLOAD_PATH, split='test',  transform=transform_tImageNet, num_class=50)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+        IMAGE_SIZE = 64
+        PATCH_SIZE = 8
+        NUM_CLASS = 50
+        DEPTH = 9
+        HEAD = 4
+        EMBED_DIM = 192
+    else:
+        raise Exception('Dataset {} not supported.'.format(DATASET_TYPE))
+
     # Override
     if patch_size:
         PATCH_SIZE=patch_size

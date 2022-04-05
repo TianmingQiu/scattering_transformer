@@ -1,0 +1,32 @@
+# random seed
+manual_seed: False  # 42
+
+dataset: [
+  # 'MNIST', 
+  'CIFAR10', 
+  ]
+
+scattering_J: 1
+scattering_L: 8
+scattering_shape: 32
+
+
+
+epoch: 50
+learning_rate: 0.0001  # don't accept scientific notations like 1e-3
+
+
+batch_size: 512
+num_workers: 4
+
+
+
+# Devices
+device: 'gpu'       # 'cpu' or 'gpu'
+# Enter cuda devices which you would like to use in training - list(int). The first entry will be your main device.
+# If you chose 'cpu' you have to give an empty list
+cuda_devices: [6]
+
+save_folder: 'cifar'
+
+eval_freq: 200

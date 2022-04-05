@@ -86,7 +86,7 @@ class Transformer(nn.Module):
             x = ff(x)
         return x
 
-class ViT(nn.Module):
+class ViT_no_cls_token(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, channels = 3, dropout = 0., emb_dropout = 0.):
         super().__init__()
         assert image_size % patch_size == 0, 'image dimensions must be divisible by the patch size'
@@ -105,13 +105,17 @@ class ViT(nn.Module):
 
         self.transformer = Transformer(dim, depth, heads, mlp_dim, dropout)
 
-        self.to_cls_token = nn.Identity()
+        # self.to_cls_token = nn.Identity()
 
         self.mlp_head = nn.Sequential(
-            nn.LayerNorm(dim),
-            nn.Linear(dim, mlp_dim),
+            # nn.LayerNorm(dim),
+            # nn.Linear(dim, mlp_dim),
+            nn.LayerNorm(int(dim*(image_size/patch_size)*(image_size/patch_size))),
+            nn.Linear(int(dim*(image_size/patch_size)*(image_size/patch_size)), mlp_dim),
+
             nn.GELU(),
             nn.Dropout(dropout),
+            
             nn.Linear(mlp_dim, num_classes)
         )
 
@@ -122,14 +126,19 @@ class ViT(nn.Module):
         x = self.patch_to_embedding(x)
         b, n, _ = x.shape
 
-        cls_tokens = self.cls_token.expand(b, -1, -1)
-        x = torch.cat((cls_tokens, x), dim=1)
-        x += self.pos_embedding[:, :(n + 1)]
+        # cls_tokens = self.cls_token.expand(b, -1, -1)
+        # x = torch.cat((cls_tokens, x), dim=1)
+        # x += self.pos_embedding[:, :(n + 1)]
+        x += self.pos_embedding[:, :n]
         x = self.dropout(x)
 
         x = self.transformer(x, mask)
 
-        x = self.to_cls_token(x[:, 0])
+
+
+        # x = self.to_cls_token(x[:, 0])
+        x = torch.flatten(x, 1)
+
         return self.mlp_head(x)
 
 class ViT_scatter(nn.Module):
@@ -178,6 +187,7 @@ class ViT_scatter(nn.Module):
         x = torch.cat((cls_tokens, x), dim=1)
         x += self.pos_embedding[:, :(n + 1)]
         x = self.dropout(x)
+        
 
         x = self.transformer(x, mask)
 

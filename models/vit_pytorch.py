@@ -252,7 +252,7 @@ class scatter_freq_ViT(nn.Module):
         num_patches = scatter_angle ** (scatter_layer-1)
         
         patch_dim = channels * (patch_size ** 2)
-        self.angle_embedding = nn.Parameter(torch.randn(1, 100, dim))
+        self.angle_embedding = nn.Parameter(torch.randn(1, 218, dim))
         self.patch_to_embedding = nn.Linear(patch_dim, dim)
         self.cls_token = nn.Parameter(torch.randn(1, 1, dim))
         self.dropout = nn.Dropout(emb_dropout)
@@ -273,50 +273,27 @@ class scatter_freq_ViT(nn.Module):
         p = self.patch_size
         J = self.scatter_layer 
         L = self.scatter_angle 
-        if len(img.shape) == 3:
-            # img: b  c  h  w
-            _, _, h, w = img.shape
-            assert h == w, 'image height and width must be in the same size'
-            scattering = self.scatter(img)
-            # scattering patch: b  c  h/2**J  w/2**J  (L+1)**J
-            x = rearrange(scattering, 'b c num h w -> b num h w c')
-            # x = rearrange(img, 'b c h/2**J w/2**J (L+1)**J -> b (L+1)**J h/2**J w/2**J c', J = J, L = L)
-            x = x.reshape(x.shape[0], x.shape[1], -1)
-            # x = x.view(x.shape[0], x.shape[1], -1)
+        # img: b  c  h  w
+        _, _, h, w = img.shape
+        assert h == w, 'image height and width must be in the same size'
+        scattering = self.scatter(img)
+        # scattering patch: b  c  h/2**J  w/2**J  (L+1)**J
+        x = rearrange(scattering, 'b c num h w -> b num h w c')
+        # x = rearrange(img, 'b c h/2**J w/2**J (L+1)**J -> b (L+1)**J h/2**J w/2**J c', J = J, L = L)
+        x = x.reshape(x.shape[0], x.shape[1], -1)
+        # x = x.view(x.shape[0], x.shape[1], -1)
 
-            x = self.patch_to_embedding(x)
-            b, n, _ = x.shape
+        x = self.patch_to_embedding(x)
+        b, n, _ = x.shape
 
-            cls_tokens = self.cls_token.expand(b, -1, -1)
-            x = torch.cat((cls_tokens, x), dim=1)
-            x += self.angle_embedding[:, :(n + 1)]
-            x = self.dropout(x)
+        cls_tokens = self.cls_token.expand(b, -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        x += self.angle_embedding[:, :(n + 1)]
+        x = self.dropout(x)
 
-            x = self.transformer(x, mask)
+        x = self.transformer(x, mask)
 
-            x = self.to_cls_token(x[:, 0])
+        x = self.to_cls_token(x[:, 0])
 
-        elif len(img.shape) < 3:
-            # img: b  h  w
-            _, h, w = img.shape
-            assert h == w, 'image height and width must be in the same size'
-            scattering = self.scatter(img)
-            # scattering patch: b  h/2**J  w/2**J  (L+1)**J
-            # x = rearrange(scattering, 'b num h w -> b num h w')
-            # x = rearrange(img, 'b c h/2**J w/2**J (L+1)**J -> b (L+1)**J h/2**J w/2**J c', J = J, L = L)
-            x = x.reshape(x.shape[0], -1)
-            # x = x.view(x.shape[0], x.shape[1], -1)
-
-            x = self.patch_to_embedding(x)
-            b, n = x.shape
-
-            cls_tokens = self.cls_token.expand(b, -1)
-            x = torch.cat((cls_tokens, x), dim=1)
-            x += self.angle_embedding[:, :(n + 1)]
-            x = self.dropout(x)
-
-            x = self.transformer(x, mask)
-
-            x = self.to_cls_token(x[:, 0])
         
         return self.mlp_head(x)

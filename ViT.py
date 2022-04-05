@@ -49,6 +49,7 @@ if DATASET_TYPE == 'STL10':
     DEPTH = 6
     HEAD = 4
     EMBED_DIM = 512
+    CHANNELS =3
     
 elif DATASET_TYPE == 'CIFAR10':
     train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
@@ -63,6 +64,7 @@ elif DATASET_TYPE == 'CIFAR10':
     DEPTH = 10
     HEAD = 8
     EMBED_DIM = 192
+    CHANNELS =3
 
 elif DATASET_TYPE == 'FLOWERS':
     train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
@@ -75,6 +77,20 @@ elif DATASET_TYPE == 'FLOWERS':
     DEPTH = 10
     HEAD = 8
     EMBED_DIM = 512
+    CHANNELS =3
+
+elif DATASET_TYPE == 'FashionMNIST':
+    train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,transform=transform_FashionMNIST)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+    test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,transform=transform_FashionMNIST)
+    test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+    IMAGE_SIZE = 28
+    PATCH_SIZE = 7
+    NUM_CLASS = 10
+    DEPTH = 6
+    HEAD = 4
+    EMBED_DIM = 49
+    CHANNELS = 1
 
 save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
 image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
@@ -133,7 +149,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = ViT(image_size=IMAGE_SIZE, patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+model = ViT(image_size=IMAGE_SIZE, patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=CHANNELS,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

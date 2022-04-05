@@ -25,7 +25,7 @@ class Flowers102Dataset(Dataset):
             self.image_idxs = loadmat(self.anno_path)['valid'][0]
         else:
             raise Exception('Split not known to Flower102 dataset')
-
+        
 
     def __len__(self):
         return len(self.image_idxs)

@@ -16,10 +16,12 @@ from matplotlib import pyplot as plt
 from models.vit_pytorch import scatter_freq_ViT
 from input.dataset import *
 
+from sklearn.model_selection import train_test_split
+
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
-DEVICE_LIST = [0]
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
+DEVICE_LIST = [0,1,2,3]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
@@ -31,14 +33,14 @@ BATCH_SIZE_TEST = 500
 N_EPOCHS = 200
 # K = 25
 
-SCATTER_LAYER = 2
-SCATTER_ANGLE = 4
+SCATTER_LAYER = 3
+SCATTER_ANGLE = 8
 
 MLP_RATIO = 2
 
 # define dataset
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='STL10')
+parser.add_argument('--dataset', type=str, default='FashionMNIST')
 DATASET_TYPE = parser.parse_args().dataset
 
 if DATASET_TYPE == 'STL10':
@@ -54,6 +56,7 @@ if DATASET_TYPE == 'STL10':
     DEPTH = 6
     HEAD = 4
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+    CHANNELS = 3
     
 elif DATASET_TYPE == 'CIFAR10':
     train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
@@ -68,6 +71,7 @@ elif DATASET_TYPE == 'CIFAR10':
     DEPTH = 10
     HEAD = 8
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+    CHANNELS = 3
 
 elif DATASET_TYPE == 'FLOWERS':
     train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
@@ -80,13 +84,12 @@ elif DATASET_TYPE == 'FLOWERS':
     DEPTH = 10
     HEAD = 8
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+    CHANNELS = 3
 
 elif DATASET_TYPE == 'FashionMNIST':
-    train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,
-                                       transform=transform_cifar10)
+    train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,transform=transform_FashionMNIST)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-    test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,
-                                      transform=transform_cifar10)
+    test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,transform=transform_FashionMNIST)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 28
     PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
@@ -94,6 +97,23 @@ elif DATASET_TYPE == 'FashionMNIST':
     DEPTH = 6
     HEAD = 4
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+    CHANNELS = 1
+
+# elif DATASET_TYPE == 'EuroSAT':
+#     dataset = torchvision.datasets.EuroSAT(DOWNLOAD_PATH, download=True, transform = transforms.RandomCrop)
+    
+#     # train_set, test_set = train_test_split(data, label, test_size=0.20, random_state=42)
+
+#     train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+#     test_set = torchvision.datasets.EuroSAT(DOWNLOAD_PATH, train=False, download=True,
+#                                       transform = transforms.RandomCrop)
+#     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+#     IMAGE_SIZE = 64
+#     PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
+#     NUM_CLASS = 10
+#     DEPTH = 6
+#     HEAD = 4
+#     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 
 save_path = SAVE_FOLDER + '/svitfreq' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
 image_path = RESULT_FOLDER + '/svitfreq' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
@@ -154,7 +174,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = scatter_freq_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+model = scatter_freq_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=CHANNELS,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

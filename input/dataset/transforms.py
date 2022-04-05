@@ -1,4 +1,7 @@
 from torchvision import transforms
+import torchvision
+import torch
+from .custom_dataset import *
 
 transform_mnist = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize((0.1307,), (0.3081,))])
@@ -30,3 +33,59 @@ transform_tImageNet = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
 ])
+
+
+def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST,
+                                patch_size=None,depth=None,head=None,embed_dim=None):
+
+    if DATASET_TYPE == 'STL10':
+        train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
+                                        transform=transform_stl10)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+        test_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='test', download=True,
+                                        transform=transform_stl10)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+        IMAGE_SIZE = 96
+        PATCH_SIZE = 8
+        NUM_CLASS = 10
+        DEPTH = 6
+        HEAD = 4
+        EMBED_DIM = 512
+        
+    elif DATASET_TYPE == 'CIFAR10':
+        train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
+                                        transform=transform_cifar10)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+        test_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=False, download=True,
+                                        transform=transform_cifar10)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+        IMAGE_SIZE = 32
+        PATCH_SIZE = 4
+        NUM_CLASS = 10
+        DEPTH = 10
+        HEAD = 8
+        EMBED_DIM = 192
+
+    elif DATASET_TYPE == 'FLOWERS':
+        train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+        test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+        IMAGE_SIZE = 96
+        PATCH_SIZE = 8
+        NUM_CLASS = 102
+        DEPTH = 10
+        HEAD = 8
+        EMBED_DIM = 512
+
+    # Override
+    if patch_size:
+        PATCH_SIZE=patch_size
+    if depth:
+        DEPTH=depth
+    if head:
+        HEAD=head
+    if embed_dim:
+        EMBED_DIM=embed_dim
+    
+    return train_loader,test_loader,IMAGE_SIZE,PATCH_SIZE,NUM_CLASS,DEPTH,HEAD,EMBED_DIM

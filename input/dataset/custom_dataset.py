@@ -49,7 +49,31 @@ class tinyImageNet(Dataset):
         self.target_transform = target_transform
         self.img_folder = path.join(self.dir, 'jpg')
 
-        assert split in ['train','split']
+        assert split in ['train','test']
+        if split == 'train':
+            self.dir = os.path.join(self.dir,'train')
+            image_set = torchvision.datasets.ImageFolder(self.dir,transform)
+        elif split == 'test':
+            self.dir = os.path.join(self.dir,'val')
+            image_set = torchvision.datasets.ImageFolder(self.dir,transform)
+
+        indices = (torch.tensor(image_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
+        self.data = torch.utils.data.Subset(image_set,indices)
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx]
+
+class ImageNet(Dataset):
+    def __init__(self, dir, split = 'train', transform=None, target_transform=None, num_class = 10):
+        self.dir = path.join(dir, 'Imagenet/Data/CLS-LOC')
+        self.transform = transform
+        self.target_transform = target_transform
+        self.img_folder = path.join(self.dir, 'jpg')
+
+        assert split in ['train','test']
         if split == 'train':
             self.dir = os.path.join(self.dir,'train')
             image_set = torchvision.datasets.ImageFolder(self.dir,transform)

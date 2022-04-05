@@ -19,7 +19,7 @@ from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
@@ -47,12 +47,13 @@ save_path = SAVE_FOLDER + '/svitimage' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' +
 image_path = RESULT_FOLDER + '/svitimage' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-scattering = Scattering2D(J=2, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
+SCATTER_LAYER = 2
+scattering = Scattering2D(J=SCATTER_LAYER, L=4, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
     quarter = int(len(data_loader)/4)
-    criterion = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
+    criterion = torch.nn.CrossEntropyLoss()
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
@@ -103,8 +104,8 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 start_time = time.time()
-
-model = ViT(image_size=IMAGE_SIZE, patch_size=PATCH_SIZE, num_classes=NUM_CLASS, channels=3*K,
+SCALE = pow(2,SCATTER_LAYER)
+model = ViT(image_size=IMAGE_SIZE // SCALE, patch_size=PATCH_SIZE // SCALE, num_classes=NUM_CLASS, channels=3*K,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

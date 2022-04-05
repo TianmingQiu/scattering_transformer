@@ -1,4 +1,3 @@
-# ref: https://github.com/kentaroy47/vision-transformers-cifar10/blob/main/train_cifar10.py
 import torch
 import torchvision
 from torchvision import transforms
@@ -30,22 +29,12 @@ BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 500
 
 N_EPOCHS = 200
-NUM_CLASS = 10
-DEPTH = 6
-HEAD = 8
-EMBED_DIM = 192
-MLP_RATIO = 2
-K = 25
+# K = 25
 
-IMAGE_SIZE = 96
 SCATTER_LAYER = 3
 SCATTER_ANGLE = 4
-NUM_CLASS = 10
-PATCH_SIZE = 12
-DEPTH = 6
-HEAD = 4
-EMBED_DIM = 3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2)
-EMBED_DIM = int(EMBED_DIM)
+
+# EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 MLP_RATIO = 2
 
 # define dataset
@@ -65,7 +54,7 @@ if DATASET_TYPE == 'STL10':
     NUM_CLASS = 10
     DEPTH = 6
     HEAD = 4
-    EMBED_DIM = 512
+    EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
     
 elif DATASET_TYPE == 'CIFAR10':
     train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=True,
@@ -79,7 +68,7 @@ elif DATASET_TYPE == 'CIFAR10':
     NUM_CLASS = 10
     DEPTH = 10
     HEAD = 8
-    EMBED_DIM = 192
+    EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 
 elif DATASET_TYPE == 'FLOWERS':
     train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
@@ -91,7 +80,7 @@ elif DATASET_TYPE == 'FLOWERS':
     NUM_CLASS = 102
     DEPTH = 10
     HEAD = 8
-    EMBED_DIM = 512
+    EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 
 save_path = SAVE_FOLDER + '/svitfreq' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
 image_path = RESULT_FOLDER + '/svitfreq' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'

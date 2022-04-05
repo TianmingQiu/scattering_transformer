@@ -31,10 +31,9 @@ BATCH_SIZE_TEST = 500
 N_EPOCHS = 200
 # K = 25
 
-SCATTER_LAYER = 3
+SCATTER_LAYER = 2
 SCATTER_ANGLE = 4
 
-# EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 MLP_RATIO = 2
 
 # define dataset
@@ -50,7 +49,7 @@ if DATASET_TYPE == 'STL10':
                                       transform=transform_stl10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 96
-    PATCH_SIZE = 8
+    PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
     NUM_CLASS = 10
     DEPTH = 6
     HEAD = 4
@@ -64,7 +63,7 @@ elif DATASET_TYPE == 'CIFAR10':
                                       transform=transform_cifar10)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 32
-    PATCH_SIZE = 4
+    PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
     NUM_CLASS = 10
     DEPTH = 10
     HEAD = 8
@@ -76,10 +75,24 @@ elif DATASET_TYPE == 'FLOWERS':
     test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 96
-    PATCH_SIZE = 8
+    PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
     NUM_CLASS = 102
     DEPTH = 10
     HEAD = 8
+    EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+
+elif DATASET_TYPE == 'FashionMNIST':
+    train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, download=True,
+                                       transform=transform_cifar10)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+    test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=False, download=True,
+                                      transform=transform_cifar10)
+    test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+    IMAGE_SIZE = 28
+    PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
+    NUM_CLASS = 10
+    DEPTH = 6
+    HEAD = 4
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
 
 save_path = SAVE_FOLDER + '/svitfreq' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'

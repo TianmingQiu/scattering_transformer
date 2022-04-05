@@ -95,6 +95,7 @@ class ViT(nn.Module):
         if num_patches <= SUGGEST_NUM_PATCHES:
             warnings.warn(f'Your number of patches ({num_patches}) may be too small for attention to be effective.')
         assert num_patches > MIN_NUM_PATCHES, f'Your number of patches ({num_patches}) is way too small for attention to be effective. Try decreasing your patch size.'
+        print('Image size: {}, Patch_size: {}, Depth: {}, Embedded dim: {}'.format(image_size,patch_size,depth,dim))
 
         self.patch_size = patch_size
 

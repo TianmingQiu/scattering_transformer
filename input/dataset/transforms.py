@@ -29,7 +29,7 @@ transform_flowers = transforms.Compose([
 
 transform_tImageNet = transforms.Compose([
     transforms.RandomHorizontalFlip(),
-    transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
+    # transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
     transforms.ToTensor(),
     transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
 ])
@@ -37,7 +37,7 @@ transform_tImageNet = transforms.Compose([
 transform_ImageNet = transforms.Compose([
     transforms.RandomResizedCrop(96),
     transforms.RandomHorizontalFlip(),
-    transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
+    # transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
     transforms.ToTensor(),
     transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
 ])
@@ -52,7 +52,7 @@ transform_FashionMNIST = transforms.Compose([
 def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST,
                                 patch_size=None,depth=None,head=None,embed_dim=None):
     DATASET_TYPE = DATASET_TYPE.upper()
-    print('READING DATASET INFORMATION: {}'.format(DATASET_TYPE))
+    print('Reading dataset information: {}'.format(DATASET_TYPE))
     if DATASET_TYPE == 'STL10':
         train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
                                         transform=transform_stl10)
@@ -63,9 +63,9 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
         IMAGE_SIZE = 96
         PATCH_SIZE = 8
         NUM_CLASS = 10
-        DEPTH = 6
-        HEAD = 4
-        EMBED_DIM = 512
+        DEPTH = 10
+        HEAD = 8
+        EMBED_DIM = 192
         CHANNELS = 3
         
     elif DATASET_TYPE == 'CIFAR10':
@@ -84,16 +84,16 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
         CHANNELS = 3
 
     elif DATASET_TYPE == 'FLOWERS':
-        train_set = Flowers102Dataset(DOWNLOAD_PATH, split='train', transform=transform_flowers)
+        train_set = Flowers102Dataset(DOWNLOAD_PATH, split='test', transform=transform_flowers)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-        test_set = Flowers102Dataset(DOWNLOAD_PATH, split='test',  transform=transform_flowers)
+        test_set = Flowers102Dataset(DOWNLOAD_PATH, split='train',  transform=transform_flowers)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
         IMAGE_SIZE = 96
         PATCH_SIZE = 8
         NUM_CLASS = 102
         DEPTH = 10
         HEAD = 8
-        EMBED_DIM = 512
+        EMBED_DIM = 192
         CHANNELS = 3
 
     elif DATASET_TYPE == 'TINYIMAGENET':
@@ -125,12 +125,12 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
 
     elif DATASET_TYPE == 'FASHIONMNIST':
         NUM_CLASS = 10
-        train_set = ImageNet(DOWNLOAD_PATH, split='train', transform=transform_FashionMNIST, num_class=NUM_CLASS)
+        train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, split='train', transform=transform_FashionMNIST, num_class=NUM_CLASS)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-        test_set = ImageNet(DOWNLOAD_PATH, split='test',  transform=transform_FashionMNIST, num_class=NUM_CLASS)
+        test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, split='test',  transform=transform_FashionMNIST, num_class=NUM_CLASS)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
         IMAGE_SIZE = 28
-        PATCH_SIZE = 7
+        PATCH_SIZE = 4
         DEPTH = 6
         HEAD = 4
         EMBED_DIM = 49
@@ -149,6 +149,6 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
     if embed_dim:
         EMBED_DIM=embed_dim
     
-    print('DATASET READING COMPLETE')
+    print('Dataset reading complete')
 
     return train_loader,test_loader,IMAGE_SIZE,PATCH_SIZE,NUM_CLASS,DEPTH,HEAD,EMBED_DIM,CHANNELS

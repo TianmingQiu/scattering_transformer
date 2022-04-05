@@ -51,7 +51,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='STL10')
 DATASET_TYPE = parser.parse_args().dataset
 
-train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM = \
+train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM, CHANNELS = \
     generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST)
 
 save_path = SAVE_FOLDER + '/svitpatch' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'

@@ -45,7 +45,9 @@ transform_ImageNet = transforms.Compose([
 transform_FashionMNIST = transforms.Compose([
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5], std=[0.225])
+    # transforms.Normalize(mean=[0.5], std=[0.225])
+    # transforms.Normalize(mean=[0.2859], std=[0.3530])
+    transforms.Normalize(mean=[0.1307], std=[0.3081])
 ])
 
 
@@ -125,15 +127,15 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
 
     elif DATASET_TYPE == 'FASHIONMNIST':
         NUM_CLASS = 10
-        train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, split='train', transform=transform_FashionMNIST, num_class=NUM_CLASS)
+        train_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True, transform=transform_FashionMNIST)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-        test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, split='test',  transform=transform_FashionMNIST, num_class=NUM_CLASS)
+        test_set = torchvision.datasets.FashionMNIST(DOWNLOAD_PATH, train=True,  transform=transform_FashionMNIST)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
         IMAGE_SIZE = 28
         PATCH_SIZE = 4
         DEPTH = 6
         HEAD = 4
-        EMBED_DIM = 49
+        EMBED_DIM = 48
         CHANNELS = 1
 
     else:

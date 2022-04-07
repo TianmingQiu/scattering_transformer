@@ -115,6 +115,10 @@ class ViT_no_cls_token(nn.Module):
 
             nn.GELU(),
             nn.Dropout(dropout),
+            nn.Linear(mlp_dim, mlp_dim),
+
+            nn.GELU(),
+            nn.Dropout(dropout),
             
             nn.Linear(mlp_dim, num_classes)
         )

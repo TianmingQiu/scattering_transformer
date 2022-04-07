@@ -8,7 +8,7 @@ from kymatio.torch import Scattering2D
 # torch.manual_seed(42)
 # torch.cuda.manual_seed(42)
 
-DOWNLOAD_PATH = '../input/dataset'
+DOWNLOAD_PATH = './input/dataset'
 # SAVE_FOLDER = '../checkpoint'
 # BATCH_SIZE_TRAIN = 1
 # BATCH_SIZE_TEST = 1
@@ -61,14 +61,19 @@ def tensor2imgshow(img_tensor):
 
 if __name__ == "__main__":
     transform_stl10 = transforms.Compose([
+    # transforms.Grayscale(),
     transforms.ToTensor(),
+    
     ])
 
     train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=False,
                                         transform=transform_stl10)
+    # train_set = torchvision.datasets.CIFAR10(DOWNLOAD_PATH, train=True, download=False,
+    #                                     transform=transform_stl10)
     # train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
     # for i, (data, target) in enumerate(train_loader):
     image = train_set[1][0]
+    
     tensor2imgshow(image)
     scatter_full_img(image, plot_feat=True)
     p1 = scatter_patch(image, 32, (80, 40), )

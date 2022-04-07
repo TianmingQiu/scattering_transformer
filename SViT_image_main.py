@@ -63,6 +63,7 @@ def main():
         transform = transforms.Compose([
             # transforms.Grayscale(),
             # transforms.RandomCrop(32, padding=4),
+            # transforms.RandomResizedCrop(32),
             # transforms.Resize(32),
             # transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
@@ -99,8 +100,8 @@ def main():
 
     # model = ViT(image_size=16, patch_size=2, num_classes=10, channels=9*3,
     #         dim=192, depth=9, heads=6, mlp_dim=256, dropout=0.1, emb_dropout=0.1)
-    model = ViT_no_cls_token(image_size=16, patch_size=2, num_classes=10, channels=9*3,
-            dim=192, depth=9, heads=6, mlp_dim=256, dropout=0.1, emb_dropout=0.1)
+    model = ViT_no_cls_token(image_size=16, patch_size=2, num_classes=10, channels=51,
+            dim=192, depth=3, heads=6, mlp_dim=256, dropout=0.1, emb_dropout=0.1)
     model.to(device)
     # if device == 'cuda':
     if len(config['cuda_devices']) > 1:
@@ -110,7 +111,7 @@ def main():
     # optimizer ----------------------------------------------------------------------------------------------------
 
     optimizer = optim.Adam(model.parameters(), lr=config['learning_rate'])
-    scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
+    # scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, verbose=True, min_lr=1e-3*1e-5, factor=0.1)
 
     train_loss_history, test_loss_history = [], []
     for epoch in range(config['epoch']):
@@ -135,7 +136,7 @@ def main():
                     '{:6.4f}'.format(loss.item()))
                 train_loss_history.append(loss.item())
                 evaluate(model, scattering, test_loader, test_loss_history, device)
-        scheduler.step(loss)
+        # scheduler.step(loss)
 
     print('Execution time:', '{:5.2f}'.format(time.time() - start_time), 'seconds')
 

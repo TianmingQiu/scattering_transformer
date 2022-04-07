@@ -138,6 +138,19 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
         EMBED_DIM = 48
         CHANNELS = 1
 
+    elif DATASET_TYPE == 'EUROSAT':
+        NUM_CLASS = 10
+        train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_stl10)
+        train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+        test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_stl10)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+        IMAGE_SIZE = 64
+        PATCH_SIZE = 8
+        DEPTH = 9
+        HEAD = 8
+        EMBED_DIM = 192
+        CHANNELS = 3
+
     else:
         raise Exception('Dataset {} not supported.'.format(DATASET_TYPE))
 

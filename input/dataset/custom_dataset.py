@@ -47,7 +47,6 @@ class tinyImageNet(Dataset):
         self.dir = path.join(dir, 'tiny-imagenet-200')
         self.transform = transform
         self.target_transform = target_transform
-        self.img_folder = path.join(self.dir, 'jpg')
 
         assert split in ['train','test']
         if split == 'train':
@@ -71,7 +70,6 @@ class ImageNet(Dataset):
         self.dir = path.join(dir, 'Imagenet/Data/CLS-LOC')
         self.transform = transform
         self.target_transform = target_transform
-        self.img_folder = path.join(self.dir, 'jpg')
 
         assert split in ['train','test']
         if split == 'train':
@@ -83,6 +81,29 @@ class ImageNet(Dataset):
 
         indices = (torch.tensor(image_set.targets)[...,None]==torch.arange(num_class)).any(-1).nonzero(as_tuple=True)[0]
         self.data = torch.utils.data.Subset(image_set,indices)
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        return self.data[idx]
+
+class EuroSAT(Dataset):
+    def __init__(self, dir, split = 'train', transform=None, target_transform=None, num_class = 10):
+        self.dir = path.join(dir, 'EuroSAT/2750')
+        self.transform = transform
+        self.target_transform = target_transform
+
+        image_set = torchvision.datasets.ImageFolder(self.dir,transform)
+        ratio = 6
+        train_indices = [i for i in range(27000) if i % ratio]
+        test_indices  = [i for i in range(27000) if i % ratio == 0]
+
+        assert split in ['train','test']
+        if split == 'train':
+            self.data = torch.utils.data.Subset(image_set,train_indices)
+        elif split == 'test':
+            self.data = torch.utils.data.Subset(image_set,test_indices)
 
     def __len__(self):
         return len(self.data)

@@ -19,7 +19,7 @@ from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
@@ -29,27 +29,17 @@ RESULT_FOLDER = './log'
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 128
 
-N_EPOCHS = 200
-NUM_CLASS = 10
-DEPTH = 6
-HEAD = 8
-EMBED_DIM = 192
-MLP_RATIO = 2
-K = 25
-
-IMAGE_SIZE = 96
+N_EPOCHS = 100
 SCATTER_LAYER = 1
 SCATTER_ANGLE = 6
-NUM_CLASS = 10
-PATCH_SIZE = 12
-DEPTH = 6
-HEAD = 4
 MLP_RATIO = 2
 
 # define dataset
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='STL10')
 DATASET_TYPE = parser.parse_args().dataset
+DATASET_TYPE = 'fashionmnist'
+
 
 train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM, CHANNELS = \
     generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST)
@@ -113,7 +103,7 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
 start_time = time.time()
 
-model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=3,
+model = scatter_patch_ViT(image_size=IMAGE_SIZE, scatter_layer = SCATTER_LAYER, scatter_angle = SCATTER_ANGLE,  patch_size = PATCH_SIZE, num_classes=NUM_CLASS, channels=CHANNELS,
         dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
 # model_dict,accuracy_history,test_loss_history = torch.load(save_path)

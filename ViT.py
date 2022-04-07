@@ -18,7 +18,7 @@ from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
@@ -28,12 +28,12 @@ RESULT_FOLDER = './log'
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 128
 
-N_EPOCHS = 200
+N_EPOCHS = 100
 MLP_RATIO = 2
 
 # define dataset
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='STL10')
+parser.add_argument('--dataset', type=str, default='fashionmnist')
 DATASET_TYPE = parser.parse_args().dataset
 
 train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM, CHANNELS = \

@@ -99,6 +99,20 @@ elif DATASET_TYPE == 'FashionMNIST':
     EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
     CHANNELS = 1
 
+elif DATASET_TYPE == 'EuroSAT':
+    train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_EuroSAT)
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
+    test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_EuroSAT)
+    test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
+    IMAGE_SIZE = 64
+    PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)
+    NUM_CLASS = 10
+    DEPTH = 9
+    HEAD = 8
+    EMBED_DIM = int(3*((IMAGE_SIZE/(2**SCATTER_LAYER))**2))
+    CHANNELS = 3
+
+
 # elif DATASET_TYPE == 'EuroSAT':
 #     dataset = torchvision.datasets.EuroSAT(DOWNLOAD_PATH, download=True, transform = transforms.RandomCrop)
     

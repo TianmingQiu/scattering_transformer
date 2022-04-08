@@ -70,9 +70,15 @@ def arr_mean(arrs):
     return [x / len(arrs) for x in res]
 
 att_s = torch.load('attention_s.pth')
-for i in range(10):
-    plt.plot(arr_mean(att_s[i*20:i*20+20]))
-plt.legend(range(1,11))
+index = [0,1,8,9]
+for i in index:
+    plt.plot(arr_mean(att_s[i*20:i*20+20]),marker='o')
+plt.ylim([35,60])
+plt.xlabel('Sorted Attention Head')
+plt.ylabel('Mean Distance')
+plt.legend(['encoder_block0','encoder_block1','encoder_block8','encoder_block9'])
+plt.grid()
+plt.title('SViT-Patch to STL10')
 plt.show()
 
 # att = torch.load('attention.pth')

@@ -53,14 +53,15 @@ transform_FashionMNIST = transforms.Compose([
 transform_EuroSAT = transforms.Compose([
     # transforms.RandomResizedCrop(),
     transforms.RandomHorizontalFlip(),
+    transforms.RandomVerticalFlip(),
     # transforms.AutoAugment(policy=transforms.autoaugment.AutoAugmentPolicy.IMAGENET,interpolation=transforms.InterpolationMode.BILINEAR),
     transforms.ToTensor(),
-    transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229,0.224,0.225])
+    transforms.Normalize(mean=(0.485, 0.456, 0.406), std=[0.229, 0.224, 0.225])
 ])
 
 
 def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST,
-                                patch_size=None,depth=None,head=None,embed_dim=None):
+                                patch_size=None,depth=None,head=None,embed_dim=None,train_percentage=None):
     DATASET_TYPE = DATASET_TYPE.upper()
     print('Reading dataset information: {}'.format(DATASET_TYPE))
     if DATASET_TYPE == 'STL10':
@@ -148,9 +149,9 @@ def generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BAT
 
     elif DATASET_TYPE == 'EUROSAT':
         NUM_CLASS = 10
-        train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_EuroSAT)
+        train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_EuroSAT, train_percentage=train_percentage)
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-        test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_EuroSAT)
+        test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_EuroSAT, train_percentage=train_percentage)
         test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
         IMAGE_SIZE = 64
         PATCH_SIZE = 8

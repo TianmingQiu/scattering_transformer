@@ -89,15 +89,18 @@ class ImageNet(Dataset):
         return self.data[idx]
 
 class EuroSAT(Dataset):
-    def __init__(self, dir, split = 'train', transform=None, target_transform=None, num_class = 10):
+    def __init__(self, dir, split = 'train', transform=None, target_transform=None, num_class = 10, train_percentage = 70):
         self.dir = path.join(dir, 'EuroSAT/2750')
         self.transform = transform
         self.target_transform = target_transform
 
+        # if train_percentage == None:
+        #     train_percentage = 70
+        assert 1 <= train_percentage <= 99, 'Train percentage must remain between 0 and 100'
+        print('Train percentage set to {}%'.format(train_percentage))
         image_set = torchvision.datasets.ImageFolder(self.dir,transform)
-        ratio = 6
-        train_indices = [i for i in range(27000) if i % ratio]
-        test_indices  = [i for i in range(27000) if i % ratio == 0]
+        train_indices = [i for i in range(27000) if i % 100 < train_percentage]
+        test_indices  = [i for i in range(27000) if i % 100 >=train_percentage]
 
         assert split in ['train','test']
         if split == 'train':

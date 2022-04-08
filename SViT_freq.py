@@ -41,7 +41,9 @@ MLP_RATIO = 2
 # define dataset
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='FashionMNIST')
+parser.add_argument('--train_percentage', type=int, default=70)
 DATASET_TYPE = parser.parse_args().dataset
+DATASET_PERCENTAGE = parser.parse_args().train_percentage
 
 if DATASET_TYPE == 'STL10':
     train_set = torchvision.datasets.STL10(DOWNLOAD_PATH, split='train', download=True,
@@ -100,9 +102,9 @@ elif DATASET_TYPE == 'FashionMNIST':
     CHANNELS = 1
 
 elif DATASET_TYPE == 'EuroSAT':
-    train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_EuroSAT)
+    train_set = EuroSAT(DOWNLOAD_PATH, split='train', transform=transform_EuroSAT, train_percentage=DATASET_PERCENTAGE)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=BATCH_SIZE_TRAIN, shuffle=True, pin_memory=True)
-    test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_EuroSAT)
+    test_set = EuroSAT(DOWNLOAD_PATH, split='test',  transform=transform_EuroSAT, train_percentage=DATASET_PERCENTAGE)
     test_loader = torch.utils.data.DataLoader(test_set, batch_size=BATCH_SIZE_TEST, shuffle=True, pin_memory=True)
     IMAGE_SIZE = 64
     PATCH_SIZE = int(IMAGE_SIZE/2**SCATTER_LAYER)

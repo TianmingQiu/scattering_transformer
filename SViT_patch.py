@@ -36,13 +36,13 @@ MLP_RATIO = 2
 
 # define dataset
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='STL10')
+parser.add_argument('--dataset', type=str, default='fashionmnist')
+parser.add_argument('--train_percentage', type=int, default=70)
 DATASET_TYPE = parser.parse_args().dataset
-DATASET_TYPE = 'fashionmnist'
-
+DATASET_PERCENTAGE = parser.parse_args().train_percentage
 
 train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM, CHANNELS = \
-    generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST)
+    generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST,train_percentage=DATASET_PERCENTAGE)
 
 save_path = SAVE_FOLDER + '/svitpatch' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
 image_path = RESULT_FOLDER + '/svitpatch' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'

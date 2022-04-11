@@ -1,4 +1,3 @@
-# ref: https://github.com/kentaroy47/vision-transformers-cifar10/blob/main/train_cifar10.py
 import torch
 import torchvision
 from torchvision import transforms
@@ -10,16 +9,13 @@ import time
 import os
 import argparse
 import numpy as np
-from kymatio.torch import Scattering2D
-from einops import rearrange
 from matplotlib import pyplot as plt
 
-from models.vit_pytorch import ViT
 from input.dataset import *
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
@@ -29,11 +25,8 @@ RESULT_FOLDER = './log'
 BATCH_SIZE_TRAIN = 128
 BATCH_SIZE_TEST = 128
 
-N_EPOCHS = 120
-
-EMBED_DIM = 192
+N_EPOCHS = 200
 MLP_RATIO = 2
-K = 25
 
 # define dataset
 parser = argparse.ArgumentParser()
@@ -45,14 +38,10 @@ DATASET_PERCENTAGE = parser.parse_args().train_percentage
 train_loader, test_loader, IMAGE_SIZE, PATCH_SIZE, NUM_CLASS, DEPTH, HEAD, EMBED_DIM, CHANNELS = \
     generate_dataset_information(DATASET_TYPE,DOWNLOAD_PATH,BATCH_SIZE_TRAIN,BATCH_SIZE_TEST,train_percentage=DATASET_PERCENTAGE)
 
-save_path = SAVE_FOLDER + '/svitimage' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
-image_path = RESULT_FOLDER + '/svitimage' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
+save_path = SAVE_FOLDER + '/vit' + DATASET_TYPE + '_d' + str(DEPTH)+'_h' + str(HEAD) + '.pth'
+image_path = RESULT_FOLDER + '/vit' + DATASET_TYPE +'_d' + str(DEPTH)+'_h' + str(HEAD) + '.png'
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-SCATTER_LAYER = 2
-SCATTER_ANGLE = 4
-NUM_OF_CHANNELS = pow(SCATTER_ANGLE + 1,2) # only apply to scatter_layer = 2
-scattering = Scattering2D(J=SCATTER_LAYER, L=SCATTER_ANGLE, shape=(IMAGE_SIZE, IMAGE_SIZE), max_order=2)
 
 def train_epoch(model, optimizer, data_loader, loss_history):
     total_samples = len(data_loader.dataset)
@@ -61,18 +50,16 @@ def train_epoch(model, optimizer, data_loader, loss_history):
     model.train()
 
     for i, (data, target) in enumerate(data_loader):
-        scattered_data, target = scattering(data).to(device), target.to(device)
-        # scattered_data[:,:,0,:,:] /= 3
-        scattered_data = rearrange(scattered_data, 'b c x h d -> b (c x) h d')
+        data, target = data.to(device), target.to(device)
+        
         optimizer.zero_grad()
-        output = F.log_softmax(model(scattered_data), dim=1)
-        # loss = F.nll_loss(output, target)
+        output = F.log_softmax(model(data), dim=1)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
         
         if i % quarter == 0:
-            print('[' +  '{:5}'.format(i * len(scattered_data)) + '/' + '{:5}'.format(total_samples) +
+            print('[' +  '{:5}'.format(i * len(data)) + '/' + '{:5}'.format(total_samples) +
                   ' (' + '{:3.0f}'.format(100 * i / len(data_loader)) + '%)]  Loss: ' +
                   '{:6.4f}'.format(loss.item()))
             loss_history.append(loss.item())
@@ -87,9 +74,8 @@ def evaluate(model, data_loader, loss_history, acc_history):
 
     with torch.no_grad():
         for data, target in data_loader:
-            data, target = scattering(data).to(device), target.to(device)
+            data, target = data.to(device), target.to(device)
             # data[:,:,0,:,:] /= 3
-            data = rearrange(data, 'b c x h d -> b (c x) h d')
             output = F.log_softmax(model(data), dim=1)
             # loss = F.nll_loss(output, target, reduction='sum')
             loss = criterion(output, target)
@@ -108,12 +94,10 @@ def evaluate(model, data_loader, loss_history, acc_history):
           '{:4.2f}'.format(100.0 * correct_samples / total_samples) + '%)\n')
 
 start_time = time.time()
-SCALE = pow(2,SCATTER_LAYER)
-model = ViT(image_size=IMAGE_SIZE // SCALE, patch_size=PATCH_SIZE // SCALE, num_classes=NUM_CLASS, channels=CHANNELS*NUM_OF_CHANNELS,
-        dim=EMBED_DIM, depth=DEPTH, heads=HEAD, mlp_dim=EMBED_DIM*MLP_RATIO, dropout=0.1, emb_dropout=0.1)
 
-# model_dict,accuracy_history,test_loss_history = torch.load(save_path)
-# model.load_state_dict(model_dict)
+model = torchvision.models.resnet50()
+num_ftrs = model.fc.in_features
+model.fc = torch.nn.Linear(num_ftrs, NUM_CLASS)
 
 optimizer = optim.Adam(model.parameters(), lr=1e-3)
 scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, verbose=True, min_lr=1e-3*1e-5, factor=0.1)

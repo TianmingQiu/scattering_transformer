@@ -20,17 +20,17 @@ from sklearn.model_selection import train_test_split
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
-DEVICE_LIST = [0,1,2,3]
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+DEVICE_LIST = [0]
 
 DOWNLOAD_PATH = './input/dataset'
 SAVE_FOLDER = './checkpoint'
 RESULT_FOLDER = './log'
 
 BATCH_SIZE_TRAIN = 128
-BATCH_SIZE_TEST = 500
+BATCH_SIZE_TEST = 128
 
-N_EPOCHS = 200
+N_EPOCHS = 120
 # K = 25
 
 SCATTER_LAYER = 3

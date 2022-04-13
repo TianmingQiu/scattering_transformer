@@ -1,0 +1,809 @@
+Files already downloaded and verified
+Files already downloaded and verified
+Epoch:   1  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 2.3231
+[ 1280/ 5000 ( 25%)]  Loss: 2.2220
+[ 2560/ 5000 ( 50%)]  Loss: 2.0339
+[ 3840/ 5000 ( 75%)]  Loss: 2.0100
+
+Average test loss: 1.9393  Accuracy: 1870/ 8000 (23.38%)
+
+Epoch:   2  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 2.1029
+[ 1280/ 5000 ( 25%)]  Loss: 2.1013
+[ 2560/ 5000 ( 50%)]  Loss: 1.9201
+[ 3840/ 5000 ( 75%)]  Loss: 1.9929
+
+Average test loss: 1.7485  Accuracy: 2411/ 8000 (30.14%)
+
+Epoch:   3  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.8420
+[ 1280/ 5000 ( 25%)]  Loss: 1.8712
+[ 2560/ 5000 ( 50%)]  Loss: 1.9040
+[ 3840/ 5000 ( 75%)]  Loss: 1.8342
+
+Average test loss: 1.7074  Accuracy: 2446/ 8000 (30.58%)
+
+Epoch:   4  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.8453
+[ 1280/ 5000 ( 25%)]  Loss: 1.8838
+[ 2560/ 5000 ( 50%)]  Loss: 1.8030
+[ 3840/ 5000 ( 75%)]  Loss: 1.8376
+
+Average test loss: 1.6637  Accuracy: 2685/ 8000 (33.56%)
+
+Epoch:   5  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7738
+[ 1280/ 5000 ( 25%)]  Loss: 1.7975
+[ 2560/ 5000 ( 50%)]  Loss: 1.7214
+[ 3840/ 5000 ( 75%)]  Loss: 1.9117
+
+Average test loss: 1.6898  Accuracy: 2381/ 8000 (29.76%)
+
+Epoch:   6  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.8117
+[ 1280/ 5000 ( 25%)]  Loss: 1.7232
+[ 2560/ 5000 ( 50%)]  Loss: 1.7295
+[ 3840/ 5000 ( 75%)]  Loss: 1.8391
+
+Average test loss: 1.6756  Accuracy: 2606/ 8000 (32.58%)
+
+Epoch:   7  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7247
+[ 1280/ 5000 ( 25%)]  Loss: 1.8306
+[ 2560/ 5000 ( 50%)]  Loss: 1.9043
+[ 3840/ 5000 ( 75%)]  Loss: 1.7103
+
+Average test loss: 1.6396  Accuracy: 2786/ 8000 (34.83%)
+
+Epoch:   8  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7006
+[ 1280/ 5000 ( 25%)]  Loss: 1.7081
+[ 2560/ 5000 ( 50%)]  Loss: 1.7179
+[ 3840/ 5000 ( 75%)]  Loss: 1.7058
+
+Average test loss: 1.5710  Accuracy: 3080/ 8000 (38.50%)
+
+Epoch:   9  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7476
+[ 1280/ 5000 ( 25%)]  Loss: 1.8835
+[ 2560/ 5000 ( 50%)]  Loss: 1.7323
+[ 3840/ 5000 ( 75%)]  Loss: 1.7338
+
+Average test loss: 1.5922  Accuracy: 3019/ 8000 (37.74%)
+
+Epoch:  10  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7346
+[ 1280/ 5000 ( 25%)]  Loss: 1.7622
+[ 2560/ 5000 ( 50%)]  Loss: 1.8146
+[ 3840/ 5000 ( 75%)]  Loss: 1.6566
+
+Average test loss: 1.6020  Accuracy: 3063/ 8000 (38.29%)
+
+Epoch:  11  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.7487
+[ 1280/ 5000 ( 25%)]  Loss: 1.6983
+[ 2560/ 5000 ( 50%)]  Loss: 1.6655
+[ 3840/ 5000 ( 75%)]  Loss: 1.6639
+
+Average test loss: 1.5427  Accuracy: 3342/ 8000 (41.78%)
+
+Epoch:  12  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.8482
+[ 1280/ 5000 ( 25%)]  Loss: 1.7138
+[ 2560/ 5000 ( 50%)]  Loss: 1.7073
+[ 3840/ 5000 ( 75%)]  Loss: 1.5886
+
+Average test loss: 1.5961  Accuracy: 3114/ 8000 (38.93%)
+
+Epoch:  13  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.6974
+[ 1280/ 5000 ( 25%)]  Loss: 1.6526
+[ 2560/ 5000 ( 50%)]  Loss: 1.5088
+[ 3840/ 5000 ( 75%)]  Loss: 1.7169
+
+Average test loss: 1.4679  Accuracy: 3471/ 8000 (43.39%)
+
+Epoch:  14  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.5852
+[ 1280/ 5000 ( 25%)]  Loss: 1.7579
+[ 2560/ 5000 ( 50%)]  Loss: 1.7372
+[ 3840/ 5000 ( 75%)]  Loss: 1.7759
+
+Average test loss: 1.5922  Accuracy: 3095/ 8000 (38.69%)
+
+Epoch:  15  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.6193
+[ 1280/ 5000 ( 25%)]  Loss: 1.6622
+[ 2560/ 5000 ( 50%)]  Loss: 1.6277
+[ 3840/ 5000 ( 75%)]  Loss: 1.6609
+
+Average test loss: 1.4425  Accuracy: 3602/ 8000 (45.03%)
+
+Epoch:  16  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4685
+[ 1280/ 5000 ( 25%)]  Loss: 1.5446
+[ 2560/ 5000 ( 50%)]  Loss: 1.6331
+[ 3840/ 5000 ( 75%)]  Loss: 1.6189
+
+Average test loss: 1.4217  Accuracy: 3679/ 8000 (45.99%)
+
+Epoch:  17  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.5390
+[ 1280/ 5000 ( 25%)]  Loss: 1.6647
+[ 2560/ 5000 ( 50%)]  Loss: 1.6358
+[ 3840/ 5000 ( 75%)]  Loss: 1.6097
+
+Average test loss: 1.5041  Accuracy: 3519/ 8000 (43.99%)
+
+Epoch:  18  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.6829
+[ 1280/ 5000 ( 25%)]  Loss: 1.6450
+[ 2560/ 5000 ( 50%)]  Loss: 1.6135
+[ 3840/ 5000 ( 75%)]  Loss: 1.5704
+
+Average test loss: 1.4077  Accuracy: 3748/ 8000 (46.85%)
+
+Epoch:  19  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.5522
+[ 1280/ 5000 ( 25%)]  Loss: 1.5808
+[ 2560/ 5000 ( 50%)]  Loss: 1.7163
+[ 3840/ 5000 ( 75%)]  Loss: 1.5419
+
+Average test loss: 1.3725  Accuracy: 3829/ 8000 (47.86%)
+
+Epoch:  20  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4841
+[ 1280/ 5000 ( 25%)]  Loss: 1.5896
+[ 2560/ 5000 ( 50%)]  Loss: 1.5163
+[ 3840/ 5000 ( 75%)]  Loss: 1.4764
+
+Average test loss: 1.4099  Accuracy: 3761/ 8000 (47.01%)
+
+Epoch:  21  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4829
+[ 1280/ 5000 ( 25%)]  Loss: 1.4667
+[ 2560/ 5000 ( 50%)]  Loss: 1.4935
+[ 3840/ 5000 ( 75%)]  Loss: 1.5059
+
+Average test loss: 1.4064  Accuracy: 3767/ 8000 (47.09%)
+
+Epoch:  22  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.6681
+[ 1280/ 5000 ( 25%)]  Loss: 1.4037
+[ 2560/ 5000 ( 50%)]  Loss: 1.5449
+[ 3840/ 5000 ( 75%)]  Loss: 1.5504
+
+Average test loss: 1.3620  Accuracy: 3927/ 8000 (49.09%)
+
+Epoch:  23  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3875
+[ 1280/ 5000 ( 25%)]  Loss: 1.4287
+[ 2560/ 5000 ( 50%)]  Loss: 1.4646
+[ 3840/ 5000 ( 75%)]  Loss: 1.4682
+
+Average test loss: 1.3215  Accuracy: 4083/ 8000 (51.04%)
+
+Epoch:  24  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4735
+[ 1280/ 5000 ( 25%)]  Loss: 1.4865
+[ 2560/ 5000 ( 50%)]  Loss: 1.3603
+[ 3840/ 5000 ( 75%)]  Loss: 1.4180
+
+Average test loss: 1.3549  Accuracy: 3956/ 8000 (49.45%)
+
+Epoch:  25  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.5383
+[ 1280/ 5000 ( 25%)]  Loss: 1.4876
+[ 2560/ 5000 ( 50%)]  Loss: 1.5247
+[ 3840/ 5000 ( 75%)]  Loss: 1.4828
+
+Average test loss: 1.3309  Accuracy: 4123/ 8000 (51.54%)
+
+Epoch:  26  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4170
+[ 1280/ 5000 ( 25%)]  Loss: 1.4311
+[ 2560/ 5000 ( 50%)]  Loss: 1.6006
+[ 3840/ 5000 ( 75%)]  Loss: 1.4329
+
+Average test loss: 1.3157  Accuracy: 4105/ 8000 (51.31%)
+
+Epoch:  27  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4548
+[ 1280/ 5000 ( 25%)]  Loss: 1.4739
+[ 2560/ 5000 ( 50%)]  Loss: 1.4162
+[ 3840/ 5000 ( 75%)]  Loss: 1.4777
+
+Average test loss: 1.3586  Accuracy: 3994/ 8000 (49.93%)
+
+Epoch:  28  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4926
+[ 1280/ 5000 ( 25%)]  Loss: 1.5343
+[ 2560/ 5000 ( 50%)]  Loss: 1.5046
+[ 3840/ 5000 ( 75%)]  Loss: 1.4218
+
+Average test loss: 1.3309  Accuracy: 4077/ 8000 (50.96%)
+
+Epoch:  29  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3461
+[ 1280/ 5000 ( 25%)]  Loss: 1.4496
+[ 2560/ 5000 ( 50%)]  Loss: 1.4357
+[ 3840/ 5000 ( 75%)]  Loss: 1.4383
+
+Average test loss: 1.2959  Accuracy: 4180/ 8000 (52.25%)
+
+Epoch:  30  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4328
+[ 1280/ 5000 ( 25%)]  Loss: 1.4177
+[ 2560/ 5000 ( 50%)]  Loss: 1.4592
+[ 3840/ 5000 ( 75%)]  Loss: 1.4125
+
+Average test loss: 1.3115  Accuracy: 4219/ 8000 (52.74%)
+
+Epoch:  31  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4800
+[ 1280/ 5000 ( 25%)]  Loss: 1.3535
+[ 2560/ 5000 ( 50%)]  Loss: 1.4068
+[ 3840/ 5000 ( 75%)]  Loss: 1.4137
+
+Average test loss: 1.2520  Accuracy: 4349/ 8000 (54.36%)
+
+Epoch:  32  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3397
+[ 1280/ 5000 ( 25%)]  Loss: 1.1531
+[ 2560/ 5000 ( 50%)]  Loss: 1.4559
+[ 3840/ 5000 ( 75%)]  Loss: 1.2673
+
+Average test loss: 1.2798  Accuracy: 4283/ 8000 (53.54%)
+
+Epoch:  33  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3891
+[ 1280/ 5000 ( 25%)]  Loss: 1.1724
+[ 2560/ 5000 ( 50%)]  Loss: 1.3856
+[ 3840/ 5000 ( 75%)]  Loss: 1.4053
+
+Average test loss: 1.2593  Accuracy: 4333/ 8000 (54.16%)
+
+Epoch:  34  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3402
+[ 1280/ 5000 ( 25%)]  Loss: 1.2630
+[ 2560/ 5000 ( 50%)]  Loss: 1.3535
+[ 3840/ 5000 ( 75%)]  Loss: 1.3414
+
+Average test loss: 1.2289  Accuracy: 4466/ 8000 (55.83%)
+
+Epoch:  35  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2752
+[ 1280/ 5000 ( 25%)]  Loss: 1.2666
+[ 2560/ 5000 ( 50%)]  Loss: 1.4286
+[ 3840/ 5000 ( 75%)]  Loss: 1.4474
+
+Average test loss: 1.2341  Accuracy: 4444/ 8000 (55.55%)
+
+Epoch:  36  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4133
+[ 1280/ 5000 ( 25%)]  Loss: 1.3154
+[ 2560/ 5000 ( 50%)]  Loss: 1.2956
+[ 3840/ 5000 ( 75%)]  Loss: 1.2646
+
+Average test loss: 1.2646  Accuracy: 4447/ 8000 (55.59%)
+
+Epoch:  37  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2413
+[ 1280/ 5000 ( 25%)]  Loss: 1.3212
+[ 2560/ 5000 ( 50%)]  Loss: 1.3207
+[ 3840/ 5000 ( 75%)]  Loss: 1.1662
+
+Average test loss: 1.2459  Accuracy: 4422/ 8000 (55.28%)
+
+Epoch:  38  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3946
+[ 1280/ 5000 ( 25%)]  Loss: 1.3287
+[ 2560/ 5000 ( 50%)]  Loss: 1.2860
+[ 3840/ 5000 ( 75%)]  Loss: 1.2826
+
+Average test loss: 1.2345  Accuracy: 4509/ 8000 (56.36%)
+
+Epoch:  39  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2681
+[ 1280/ 5000 ( 25%)]  Loss: 1.3428
+[ 2560/ 5000 ( 50%)]  Loss: 1.2288
+[ 3840/ 5000 ( 75%)]  Loss: 1.2161
+
+Average test loss: 1.2118  Accuracy: 4568/ 8000 (57.10%)
+
+Epoch:  40  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2249
+[ 1280/ 5000 ( 25%)]  Loss: 1.2025
+[ 2560/ 5000 ( 50%)]  Loss: 1.3222
+[ 3840/ 5000 ( 75%)]  Loss: 1.3762
+
+Average test loss: 1.2711  Accuracy: 4333/ 8000 (54.16%)
+
+Epoch:  41  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.4367
+[ 1280/ 5000 ( 25%)]  Loss: 1.2622
+[ 2560/ 5000 ( 50%)]  Loss: 1.2532
+[ 3840/ 5000 ( 75%)]  Loss: 1.2113
+
+Average test loss: 1.2007  Accuracy: 4617/ 8000 (57.71%)
+
+Epoch:  42  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.3256
+[ 1280/ 5000 ( 25%)]  Loss: 1.2391
+[ 2560/ 5000 ( 50%)]  Loss: 1.2748
+[ 3840/ 5000 ( 75%)]  Loss: 1.1496
+
+Average test loss: 1.2177  Accuracy: 4560/ 8000 (57.00%)
+
+Epoch:  43  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2003
+[ 1280/ 5000 ( 25%)]  Loss: 1.1557
+[ 2560/ 5000 ( 50%)]  Loss: 1.2864
+[ 3840/ 5000 ( 75%)]  Loss: 1.1839
+
+Average test loss: 1.1874  Accuracy: 4621/ 8000 (57.76%)
+
+Epoch:  44  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2302
+[ 1280/ 5000 ( 25%)]  Loss: 1.2208
+[ 2560/ 5000 ( 50%)]  Loss: 1.1686
+[ 3840/ 5000 ( 75%)]  Loss: 1.2038
+
+Average test loss: 1.1975  Accuracy: 4669/ 8000 (58.36%)
+
+Epoch:  45  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2306
+[ 1280/ 5000 ( 25%)]  Loss: 1.1660
+[ 2560/ 5000 ( 50%)]  Loss: 1.1231
+[ 3840/ 5000 ( 75%)]  Loss: 1.1394
+
+Average test loss: 1.1838  Accuracy: 4697/ 8000 (58.71%)
+
+Epoch:  46  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.1090
+[ 1280/ 5000 ( 25%)]  Loss: 1.1079
+[ 2560/ 5000 ( 50%)]  Loss: 1.2431
+[ 3840/ 5000 ( 75%)]  Loss: 1.2167
+
+Average test loss: 1.1762  Accuracy: 4699/ 8000 (58.74%)
+
+Epoch:  47  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.1881
+[ 1280/ 5000 ( 25%)]  Loss: 1.2441
+[ 2560/ 5000 ( 50%)]  Loss: 1.0992
+[ 3840/ 5000 ( 75%)]  Loss: 1.1921
+
+Average test loss: 1.2317  Accuracy: 4562/ 8000 (57.03%)
+
+Epoch:  48  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0798
+[ 1280/ 5000 ( 25%)]  Loss: 1.3977
+[ 2560/ 5000 ( 50%)]  Loss: 1.1779
+[ 3840/ 5000 ( 75%)]  Loss: 1.0538
+
+Average test loss: 1.1669  Accuracy: 4770/ 8000 (59.63%)
+
+Epoch:  49  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2176
+[ 1280/ 5000 ( 25%)]  Loss: 1.0743
+[ 2560/ 5000 ( 50%)]  Loss: 1.0887
+[ 3840/ 5000 ( 75%)]  Loss: 1.1575
+
+Average test loss: 1.1849  Accuracy: 4699/ 8000 (58.74%)
+
+Epoch:  50  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0571
+[ 1280/ 5000 ( 25%)]  Loss: 1.1447
+[ 2560/ 5000 ( 50%)]  Loss: 1.1178
+[ 3840/ 5000 ( 75%)]  Loss: 1.0811
+
+Average test loss: 1.1932  Accuracy: 4654/ 8000 (58.18%)
+
+Epoch:  51  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2229
+[ 1280/ 5000 ( 25%)]  Loss: 1.0591
+[ 2560/ 5000 ( 50%)]  Loss: 1.2556
+[ 3840/ 5000 ( 75%)]  Loss: 1.1499
+
+Average test loss: 1.1993  Accuracy: 4708/ 8000 (58.85%)
+
+Epoch:  52  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0267
+[ 1280/ 5000 ( 25%)]  Loss: 1.1840
+[ 2560/ 5000 ( 50%)]  Loss: 1.1168
+[ 3840/ 5000 ( 75%)]  Loss: 1.1897
+
+Average test loss: 1.1898  Accuracy: 4707/ 8000 (58.84%)
+
+Epoch:  53  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0827
+[ 1280/ 5000 ( 25%)]  Loss: 1.1675
+[ 2560/ 5000 ( 50%)]  Loss: 1.1702
+[ 3840/ 5000 ( 75%)]  Loss: 1.1176
+
+Average test loss: 1.1594  Accuracy: 4797/ 8000 (59.96%)
+
+Epoch:  54  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.1229
+[ 1280/ 5000 ( 25%)]  Loss: 1.1058
+[ 2560/ 5000 ( 50%)]  Loss: 1.1388
+[ 3840/ 5000 ( 75%)]  Loss: 1.1720
+
+Average test loss: 1.1584  Accuracy: 4863/ 8000 (60.79%)
+
+Epoch:  55  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0876
+[ 1280/ 5000 ( 25%)]  Loss: 1.1062
+[ 2560/ 5000 ( 50%)]  Loss: 1.1647
+[ 3840/ 5000 ( 75%)]  Loss: 1.1909
+
+Average test loss: 1.1752  Accuracy: 4741/ 8000 (59.26%)
+
+Epoch:  56  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0421
+[ 1280/ 5000 ( 25%)]  Loss: 1.0575
+[ 2560/ 5000 ( 50%)]  Loss: 1.2341
+[ 3840/ 5000 ( 75%)]  Loss: 1.0866
+
+Average test loss: 1.1523  Accuracy: 4858/ 8000 (60.73%)
+
+Epoch:  57  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.9891
+[ 1280/ 5000 ( 25%)]  Loss: 1.1454
+[ 2560/ 5000 ( 50%)]  Loss: 1.0873
+[ 3840/ 5000 ( 75%)]  Loss: 1.2157
+
+Average test loss: 1.1584  Accuracy: 4828/ 8000 (60.35%)
+
+Epoch:  58  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.9978
+[ 1280/ 5000 ( 25%)]  Loss: 1.2004
+[ 2560/ 5000 ( 50%)]  Loss: 1.1837
+[ 3840/ 5000 ( 75%)]  Loss: 1.1053
+
+Average test loss: 1.1662  Accuracy: 4835/ 8000 (60.44%)
+
+Epoch:  59  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0106
+[ 1280/ 5000 ( 25%)]  Loss: 1.0112
+[ 2560/ 5000 ( 50%)]  Loss: 1.1451
+[ 3840/ 5000 ( 75%)]  Loss: 1.0350
+
+Average test loss: 1.1581  Accuracy: 4865/ 8000 (60.81%)
+
+Epoch:  60  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2198
+[ 1280/ 5000 ( 25%)]  Loss: 1.0586
+[ 2560/ 5000 ( 50%)]  Loss: 1.0421
+[ 3840/ 5000 ( 75%)]  Loss: 1.0776
+
+Average test loss: 1.1502  Accuracy: 4826/ 8000 (60.33%)
+
+Epoch:  61  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0230
+[ 1280/ 5000 ( 25%)]  Loss: 1.0682
+[ 2560/ 5000 ( 50%)]  Loss: 0.9734
+[ 3840/ 5000 ( 75%)]  Loss: 1.0911
+
+Average test loss: 1.2021  Accuracy: 4821/ 8000 (60.26%)
+
+Epoch:  62  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0043
+[ 1280/ 5000 ( 25%)]  Loss: 1.0438
+[ 2560/ 5000 ( 50%)]  Loss: 1.0722
+[ 3840/ 5000 ( 75%)]  Loss: 1.0119
+
+Average test loss: 1.1523  Accuracy: 4908/ 8000 (61.35%)
+
+Epoch:  63  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0116
+[ 1280/ 5000 ( 25%)]  Loss: 1.0384
+[ 2560/ 5000 ( 50%)]  Loss: 1.0304
+[ 3840/ 5000 ( 75%)]  Loss: 0.9903
+
+Average test loss: 1.2047  Accuracy: 4739/ 8000 (59.24%)
+
+Epoch:  64  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.2102
+[ 1280/ 5000 ( 25%)]  Loss: 1.0876
+[ 2560/ 5000 ( 50%)]  Loss: 0.9083
+[ 3840/ 5000 ( 75%)]  Loss: 0.9831
+
+Average test loss: 1.1259  Accuracy: 4986/ 8000 (62.33%)
+
+Epoch:  65  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.8921
+[ 1280/ 5000 ( 25%)]  Loss: 0.9984
+[ 2560/ 5000 ( 50%)]  Loss: 1.0088
+[ 3840/ 5000 ( 75%)]  Loss: 1.1187
+
+Average test loss: 1.1995  Accuracy: 4825/ 8000 (60.31%)
+
+Epoch:  66  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0649
+[ 1280/ 5000 ( 25%)]  Loss: 0.9236
+[ 2560/ 5000 ( 50%)]  Loss: 0.8486
+[ 3840/ 5000 ( 75%)]  Loss: 0.9351
+
+Average test loss: 1.1686  Accuracy: 4841/ 8000 (60.51%)
+
+Epoch:  67  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.9317
+[ 1280/ 5000 ( 25%)]  Loss: 1.0785
+[ 2560/ 5000 ( 50%)]  Loss: 0.9835
+[ 3840/ 5000 ( 75%)]  Loss: 1.0377
+
+Average test loss: 1.1703  Accuracy: 4872/ 8000 (60.90%)
+
+Epoch:  68  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 1.0278
+[ 1280/ 5000 ( 25%)]  Loss: 1.0145
+[ 2560/ 5000 ( 50%)]  Loss: 0.9944
+[ 3840/ 5000 ( 75%)]  Loss: 0.9941
+
+Average test loss: 1.1582  Accuracy: 4939/ 8000 (61.74%)
+
+Epoch:  69  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.9691
+[ 1280/ 5000 ( 25%)]  Loss: 0.9838
+[ 2560/ 5000 ( 50%)]  Loss: 0.9862
+[ 3840/ 5000 ( 75%)]  Loss: 0.8939
+
+Average test loss: 1.1923  Accuracy: 4847/ 8000 (60.59%)
+
+Epoch:  70  Learning rate: 1.0e-03
+[    0/ 5000 (  0%)]  Loss: 0.9663
+[ 1280/ 5000 ( 25%)]  Loss: 1.0043
+[ 2560/ 5000 ( 50%)]  Loss: 0.9235
+[ 3840/ 5000 ( 75%)]  Loss: 1.0591
+
+Average test loss: 1.1703  Accuracy: 4930/ 8000 (61.63%)
+
+Epoch 00070: reducing learning rate of group 0 to 1.0000e-04.
+Epoch:  71  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.9279
+[ 1280/ 5000 ( 25%)]  Loss: 1.0520
+[ 2560/ 5000 ( 50%)]  Loss: 0.9488
+[ 3840/ 5000 ( 75%)]  Loss: 0.9267
+
+Average test loss: 1.1313  Accuracy: 4967/ 8000 (62.09%)
+
+Epoch:  72  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.8655
+[ 1280/ 5000 ( 25%)]  Loss: 0.7778
+[ 2560/ 5000 ( 50%)]  Loss: 0.8754
+[ 3840/ 5000 ( 75%)]  Loss: 0.7694
+
+Average test loss: 1.1402  Accuracy: 4996/ 8000 (62.45%)
+
+Epoch:  73  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.8643
+[ 1280/ 5000 ( 25%)]  Loss: 0.8139
+[ 2560/ 5000 ( 50%)]  Loss: 0.8079
+[ 3840/ 5000 ( 75%)]  Loss: 0.7967
+
+Average test loss: 1.1527  Accuracy: 5023/ 8000 (62.79%)
+
+Epoch:  74  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.8352
+[ 1280/ 5000 ( 25%)]  Loss: 0.8248
+[ 2560/ 5000 ( 50%)]  Loss: 0.7391
+[ 3840/ 5000 ( 75%)]  Loss: 0.8625
+
+Average test loss: 1.1467  Accuracy: 5034/ 8000 (62.93%)
+
+Epoch:  75  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.8483
+[ 1280/ 5000 ( 25%)]  Loss: 0.9021
+[ 2560/ 5000 ( 50%)]  Loss: 0.8169
+[ 3840/ 5000 ( 75%)]  Loss: 0.8011
+
+Average test loss: 1.1533  Accuracy: 5054/ 8000 (63.18%)
+
+Epoch:  76  Learning rate: 1.0e-04
+[    0/ 5000 (  0%)]  Loss: 0.8197
+[ 1280/ 5000 ( 25%)]  Loss: 0.8228
+[ 2560/ 5000 ( 50%)]  Loss: 0.8601
+[ 3840/ 5000 ( 75%)]  Loss: 0.8361
+
+Average test loss: 1.1563  Accuracy: 5036/ 8000 (62.95%)
+
+Epoch 00076: reducing learning rate of group 0 to 1.0000e-05.
+Epoch:  77  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.8757
+[ 1280/ 5000 ( 25%)]  Loss: 0.7894
+[ 2560/ 5000 ( 50%)]  Loss: 0.8611
+[ 3840/ 5000 ( 75%)]  Loss: 0.8617
+
+Average test loss: 1.1474  Accuracy: 5061/ 8000 (63.26%)
+
+Epoch:  78  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.7635
+[ 1280/ 5000 ( 25%)]  Loss: 0.8338
+[ 2560/ 5000 ( 50%)]  Loss: 0.8403
+[ 3840/ 5000 ( 75%)]  Loss: 0.9037
+
+Average test loss: 1.1552  Accuracy: 5034/ 8000 (62.93%)
+
+Epoch:  79  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.9117
+[ 1280/ 5000 ( 25%)]  Loss: 0.8432
+[ 2560/ 5000 ( 50%)]  Loss: 0.8583
+[ 3840/ 5000 ( 75%)]  Loss: 0.7812
+
+Average test loss: 1.1444  Accuracy: 5069/ 8000 (63.36%)
+
+Epoch:  80  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.8549
+[ 1280/ 5000 ( 25%)]  Loss: 0.7763
+[ 2560/ 5000 ( 50%)]  Loss: 0.8018
+[ 3840/ 5000 ( 75%)]  Loss: 0.8191
+
+Average test loss: 1.1483  Accuracy: 5048/ 8000 (63.10%)
+
+Epoch:  81  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.8928
+[ 1280/ 5000 ( 25%)]  Loss: 0.8092
+[ 2560/ 5000 ( 50%)]  Loss: 0.8155
+[ 3840/ 5000 ( 75%)]  Loss: 0.8910
+
+Average test loss: 1.1419  Accuracy: 5117/ 8000 (63.96%)
+
+Epoch:  82  Learning rate: 1.0e-05
+[    0/ 5000 (  0%)]  Loss: 0.8840
+[ 1280/ 5000 ( 25%)]  Loss: 0.7935
+[ 2560/ 5000 ( 50%)]  Loss: 0.8397
+[ 3840/ 5000 ( 75%)]  Loss: 0.8345
+
+Average test loss: 1.1573  Accuracy: 5047/ 8000 (63.09%)
+
+Epoch 00082: reducing learning rate of group 0 to 1.0000e-06.
+Epoch:  83  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.7818
+[ 1280/ 5000 ( 25%)]  Loss: 0.7745
+[ 2560/ 5000 ( 50%)]  Loss: 0.8811
+[ 3840/ 5000 ( 75%)]  Loss: 0.7935
+
+Average test loss: 1.1450  Accuracy: 5057/ 8000 (63.21%)
+
+Epoch:  84  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.8207
+[ 1280/ 5000 ( 25%)]  Loss: 0.8104
+[ 2560/ 5000 ( 50%)]  Loss: 0.8731
+[ 3840/ 5000 ( 75%)]  Loss: 0.8503
+
+Average test loss: 1.1528  Accuracy: 5025/ 8000 (62.81%)
+
+Epoch:  85  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.9632
+[ 1280/ 5000 ( 25%)]  Loss: 0.7700
+[ 2560/ 5000 ( 50%)]  Loss: 0.7584
+[ 3840/ 5000 ( 75%)]  Loss: 0.9352
+
+Average test loss: 1.1506  Accuracy: 5047/ 8000 (63.09%)
+
+Epoch:  86  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.8600
+[ 1280/ 5000 ( 25%)]  Loss: 0.7786
+[ 2560/ 5000 ( 50%)]  Loss: 0.7867
+[ 3840/ 5000 ( 75%)]  Loss: 0.9172
+
+Average test loss: 1.1563  Accuracy: 5028/ 8000 (62.85%)
+
+Epoch:  87  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.8794
+[ 1280/ 5000 ( 25%)]  Loss: 0.7735
+[ 2560/ 5000 ( 50%)]  Loss: 0.7240
+[ 3840/ 5000 ( 75%)]  Loss: 0.8111
+
+Average test loss: 1.1481  Accuracy: 5049/ 8000 (63.11%)
+
+Epoch:  88  Learning rate: 1.0e-06
+[    0/ 5000 (  0%)]  Loss: 0.8088
+[ 1280/ 5000 ( 25%)]  Loss: 0.9118
+[ 2560/ 5000 ( 50%)]  Loss: 0.7383
+[ 3840/ 5000 ( 75%)]  Loss: 0.8097
+
+Average test loss: 1.1551  Accuracy: 5033/ 8000 (62.91%)
+
+Epoch 00088: reducing learning rate of group 0 to 1.0000e-07.
+Epoch:  89  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.9053
+[ 1280/ 5000 ( 25%)]  Loss: 0.7953
+[ 2560/ 5000 ( 50%)]  Loss: 0.7519
+[ 3840/ 5000 ( 75%)]  Loss: 0.8539
+
+Average test loss: 1.1490  Accuracy: 5071/ 8000 (63.39%)
+
+Epoch:  90  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.9085
+[ 1280/ 5000 ( 25%)]  Loss: 0.8093
+[ 2560/ 5000 ( 50%)]  Loss: 0.7444
+[ 3840/ 5000 ( 75%)]  Loss: 0.8021
+
+Average test loss: 1.1453  Accuracy: 5072/ 8000 (63.40%)
+
+Epoch:  91  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.7319
+[ 1280/ 5000 ( 25%)]  Loss: 0.8488
+[ 2560/ 5000 ( 50%)]  Loss: 0.8776
+[ 3840/ 5000 ( 75%)]  Loss: 0.8121
+
+Average test loss: 1.1540  Accuracy: 5031/ 8000 (62.89%)
+
+Epoch:  92  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.8039
+[ 1280/ 5000 ( 25%)]  Loss: 0.7412
+[ 2560/ 5000 ( 50%)]  Loss: 0.8443
+[ 3840/ 5000 ( 75%)]  Loss: 0.7902
+
+Average test loss: 1.1476  Accuracy: 5037/ 8000 (62.96%)
+
+Epoch:  93  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.7725
+[ 1280/ 5000 ( 25%)]  Loss: 0.8414
+[ 2560/ 5000 ( 50%)]  Loss: 0.8190
+[ 3840/ 5000 ( 75%)]  Loss: 0.7958
+
+Average test loss: 1.1469  Accuracy: 5058/ 8000 (63.23%)
+
+Epoch:  94  Learning rate: 1.0e-07
+[    0/ 5000 (  0%)]  Loss: 0.7833
+[ 1280/ 5000 ( 25%)]  Loss: 0.8098
+[ 2560/ 5000 ( 50%)]  Loss: 0.8088
+[ 3840/ 5000 ( 75%)]  Loss: 0.8759
+
+Average test loss: 1.1460  Accuracy: 5054/ 8000 (63.18%)
+
+Epoch 00094: reducing learning rate of group 0 to 1.0000e-08.
+Epoch:  95  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.7894
+[ 1280/ 5000 ( 25%)]  Loss: 0.8099
+[ 2560/ 5000 ( 50%)]  Loss: 0.8363
+[ 3840/ 5000 ( 75%)]  Loss: 0.7781
+
+Average test loss: 1.1555  Accuracy: 5036/ 8000 (62.95%)
+
+Epoch:  96  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.8081
+[ 1280/ 5000 ( 25%)]  Loss: 0.9613
+[ 2560/ 5000 ( 50%)]  Loss: 0.8154
+[ 3840/ 5000 ( 75%)]  Loss: 0.8121
+
+Average test loss: 1.1494  Accuracy: 5042/ 8000 (63.03%)
+
+Epoch:  97  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.7812
+[ 1280/ 5000 ( 25%)]  Loss: 0.7724
+[ 2560/ 5000 ( 50%)]  Loss: 0.8119
+[ 3840/ 5000 ( 75%)]  Loss: 0.8756
+
+Average test loss: 1.1487  Accuracy: 5038/ 8000 (62.98%)
+
+Epoch:  98  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.9118
+[ 1280/ 5000 ( 25%)]  Loss: 0.8322
+[ 2560/ 5000 ( 50%)]  Loss: 0.7988
+[ 3840/ 5000 ( 75%)]  Loss: 0.8246
+
+Average test loss: 1.1422  Accuracy: 5051/ 8000 (63.14%)
+
+Epoch:  99  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.7399
+[ 1280/ 5000 ( 25%)]  Loss: 0.7977
+[ 2560/ 5000 ( 50%)]  Loss: 0.7964
+[ 3840/ 5000 ( 75%)]  Loss: 0.8403
+
+Average test loss: 1.1506  Accuracy: 5040/ 8000 (63.00%)
+
+Epoch: 100  Learning rate: 1.0e-08
+[    0/ 5000 (  0%)]  Loss: 0.8050
+[ 1280/ 5000 ( 25%)]  Loss: 0.8299
+[ 2560/ 5000 ( 50%)]  Loss: 0.8339
+[ 3840/ 5000 ( 75%)]  Loss: 0.8599
+
+Average test loss: 1.1504  Accuracy: 5046/ 8000 (63.08%)
+
+Execution time: 6835.82 seconds
+Model saved to ./checkpoint/STL10_d10_h8_s_1.pth

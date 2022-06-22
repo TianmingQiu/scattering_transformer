@@ -4,9 +4,9 @@ by [Tianming Qiu](https://github.com/TianmingQiu), [Ming Gui](https://github.com
 
 ## Table of Contents
 0. [Introduction](#introduction)
-0. [Release Notes](#Release Notes)
+0. [Release Notes](#Release-Notes)
 0. [Prerequisites](#Prerequisites)
-0. [Model Zoo](#Model Zoo)
+0. [Model Zoo](#Model-Zoo)
 0. [Bibtex](#Bibtex)
 0. [License](#License)
 
@@ -15,7 +15,7 @@ by [Tianming Qiu](https://github.com/TianmingQiu), [Ming Gui](https://github.com
 Overview of the model: we propose hybrid ViT models with scattering transform called Scattering Vision Transformer (SViT). More specifically, we investigate three tokenizations using scattering transform for ViT: patch-wise scattering tokens (SViTPatch), scattering image feature tokens (SViT-Image), and scattering frequency sub-band response tokens (SViT-Freq). 
 
 ## Release Notes
-List of Releases in reverse chronological order (= latest up top):
+
 - **Release 1.0**, 22.06.2022
     - Git tag: release_v1_0
     - ...
@@ -42,7 +42,7 @@ $ pip install -r requirements.txt
 ```sh
 $ cd input/dataset
 ```
-*- Configure the hyperparameters of the model in the "custom_dataset.py" (if needed)*
+*- Configure the parameters of the model in the "custom_dataset.py" and "transforms.py" (if needed)*
 
 #### Used Dataset
 - CIFAR10 

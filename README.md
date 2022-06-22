@@ -33,7 +33,7 @@ List of Releases in reverse chronological order (= latest up top):
 ```sh
 $ git clone https://github.com/TianmingQiu/scattering_transformer
 $ cd scattering_transformer
-$ conda install --file requirements.txt 
+$ pip install -r requirements.txt 
 ```
 
 #### Setup local data directory

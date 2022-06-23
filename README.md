@@ -11,7 +11,7 @@ by [Tianming Qiu](https://github.com/TianmingQiu), [Ming Gui](https://github.com
 
 ## Release Notes
 - **Release 1.0**, (22.06.2022)
-    - Git tag: release_v1_0
+    - Git tag: MLSP-v1.0
 
 
 ## Introduction

@@ -10,9 +10,9 @@ by [Tianming Qiu](https://github.com/TianmingQiu), [Ming Gui](https://github.com
 0. [Bibtex](#Bibtex)
 
 ## Release Notes
-- **Release 1.0**, (22.06.2022
+- **Release 1.0**, (22.06.2022)
     - Git tag: release_v1_0
-    - ...
+
 
 ## Introduction
 ![image](SViT_framework.png)
@@ -49,17 +49,6 @@ $ cd input/dataset
 
 
 *- Change the variable "DATA_TYPE" to the dataset you want to test into in the main function*
-
-
-## License
-
-
-## Bibtex
-
-```
-@article{
-}
-```
 
 
 

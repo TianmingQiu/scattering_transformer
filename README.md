@@ -1,6 +1,5 @@
 # SViT: Hybrid Vision Transformer Models With Scattering Transform
-
-by [Tianming Qiu](https://github.com/TianmingQiu), [Ming Gui](https://github.com/mgui7), [Cheng Yan](https://github.com/ChengYan97), [Ziqing Zhao](https://github.com/ZiqingZhao), [Hao Shen](https://www.fortiss.org/forschung/projekte/detail/machine-learning-lab).
+This work is published in [2022 IEEE 32nd International Workshop on Machine Learning for Signal Processing (MLSP)](https://ieeexplore.ieee.org/document/9943334)
 
 ## Table of Contents
 0. [Release Notes](#Release-Notes)

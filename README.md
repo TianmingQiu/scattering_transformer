@@ -1,5 +1,5 @@
 # SViT: Hybrid Vision Transformer Models With Scattering Transform
-This work is published in [2022 IEEE 32nd International Workshop on Machine Learning for Signal Processing (MLSP)](https://ieeexplore.ieee.org/document/9943334)
+This work is published in [2022 IEEE 32nd International Workshop on Machine Learning for Signal Processing (MLSP)](https://ieeexplore.ieee.org/document/9943334).
 
 ## Table of Contents
 0. [Release Notes](#Release-Notes)
